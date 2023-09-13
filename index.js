@@ -1,65 +1,63 @@
-const { Client, GatewayIntentBits, Collection } = require('discord.js');
-const client = new Client({ intents: Object.values(GatewayIntentBits) });
-require('dotenv').config();
-const fs = require('fs');
+const { Client, Collection, GatewayIntentBits, Partials } = require("discord.js");
+const client = new Client({
+  intents: [GatewayIntentBits.AutoModerationConfiguration, GatewayIntentBits.AutoModerationExecution, GatewayIntentBits.DirectMessageReactions, GatewayIntentBits.DirectMessageTyping, GatewayIntentBits.DirectMessages, GatewayIntentBits.GuildEmojisAndStickers, GatewayIntentBits.GuildIntegrations, GatewayIntentBits.GuildInvites, GatewayIntentBits.GuildMembers, GatewayIntentBits.GuildMessageReactions, GatewayIntentBits.GuildMessageTyping, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildModeration, GatewayIntentBits.GuildPresences, GatewayIntentBits.GuildScheduledEvents, GatewayIntentBits.GuildVoiceStates, GatewayIntentBits.GuildWebhooks, GatewayIntentBits.Guilds, GatewayIntentBits.MessageContent],
+  partials: [Partials.Message, Partials.Channel, Partials.GuildMember, Partials.Reaction, Partials.GuildScheduledEvent, Partials.User, Partials.ThreadMember],
+  shards: "auto"
+});
+const { readdirSync } = require("node:fs");
+const moment = require("moment");
+
+client.commandaliases = new Collection();
+client.commands = new Collection();
+client.slashcommands = new Collection();
+client.slashdatas = [];
 
 
-// const commandFiles = fs.readdirSync("./src/commands").filter(file => file.endsWith(".js"));
-// const slashCommandFiles = fs.readdirSync("./src/slashCommands").filter(file => file.endsWith(".js"));
-// const eventFiles = fs.readdirSync("src/events").filter(file => file.endsWith(".js"));
+function log(message) {
+  console.log(`[${moment().format("DD-MM-YYYY HH:mm:ss")}] ${message}`);
+};
+client.log = log
 
-// const slashCommandList = [];
+// Command handler
+readdirSync("./src/commands/prefix").forEach(async (file) => {
+  const command = await require(`./src/commands/prefix/${file}`);
+  if (command) {
+    client.commands.set(command.name, command);
+    if (command.aliases && Array.isArray(command.aliases)) {
+      command.aliases.forEach((alias) => {
+        client.commandaliases.set(alias, command.name);
+      });
+    }
+  }
+});
 
-// client.commands = new Collection();
-// client.slashCommands = new Collection();
-// client.events = new Collection();
+// Slash command handler
+const slashcommands = [];
+readdirSync("./src/commands/slash").forEach(async (file) => {
+  const command = await require(`./src/commands/slash/${file}`);
+  client.slashdatas.push(command.data.toJSON());
+  client.slashcommands.set(command.data.name, command);
+});
 
+// Event handler
+readdirSync("./src/events").forEach(async (file) => {
+  const event = await require(`./src/events/${file}`);
+  if (event.once) {
+    client.once(event.name, (...args) => event.execute(...args));
+  } else {
+    client.on(event.name, (...args) => event.execute(...args));
+  }
+});
 
-// for (const file of commandFiles) {
-//   const command = require(`./src/commands/${file}`);
-//   client.commands.set(command.name, command);
-// }
-
-// // make a reset code for all slash commands
-// for (const file of slashCommandFiles) {
-//   delete require.cache[require.resolve(`./src/slashCommands/${file}`)];
-// }
-
-// for (const file of slashCommandFiles) {
-//   const slashCommand = require(`./src/slashCommands/${file}`);
-//   console.log(slashCommand);
-//   client.slashCommands.set(slashCommand.name, slashCommand);
-//   slashCommandList.push(slashCommand.data.toJSON());
-// }
-
-// for (const file of eventFiles) {
-//   const event = require(`./src/events/${file}`);
-//   if (event.once) {
-//     client.once(event.name, (...args) => event.execute(...args, slashCommandList));
-//   } else {
-//     client.on(event.name, (...args) => event.execute(...args, slashCommandList));
-//   }
-// }
-
-
-// client.on('interactionCreate', async interaction => {
-//   if (!interaction.isCommand()) return;
-
-//   const command = client.slashCommands.get(interaction.commandName);
-//   if (!command) return;
-
-//   try {
-//     await command.run(interaction);
-//   } catch (error) {
-//     console.error(error);
-//     await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
-//   }
-// });
-
-
-
-
-
-
+// Process listeners
+process.on("unhandledRejection", (e) => {
+  console.log(e);
+});
+process.on("uncaughtException", (e) => {
+  console.log(e);
+});
+process.on("uncaughtExceptionMonitor", (e) => {
+  console.log(e);
+});
 
 client.login(process.env.BOT_TOKEN);

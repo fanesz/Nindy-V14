@@ -1,28 +1,28 @@
-const { REST } = require('@discordjs/rest');
-const { Routes } = require('discord-api-types/v9');
+const { ActivityType, Events } = require("discord.js")
+const { REST } = require("@discordjs/rest");
+const { Routes } = require("discord-api-types/v10");
 
 module.exports = {
-  name: 'ready',
+  name: Events.ClientReady,
   once: true,
-  execute(client, slashCommands) {
+  async execute(client) {
+    const rest = new REST({ version: "10" }).setToken(client.token);
+    const activities = [`Developed by memte.`, `${client.user.username}`]
+    let nowActivity = 0;
+    function botPresence() {
+      client.user.presence.set({ activities: [{ name: `${activities[nowActivity++ % activities.length]}`, type: ActivityType.Listening }] })
+      setTimeout(botPresence, 300000)
+    }
+    botPresence()
 
-    console.log(`Logged in as ${client.user.tag}!`);
-
-    const CLIENT_ID = client.user.id;
-    const rest = new REST({ version: '10' }).setToken(process.env.BOT_TOKEN);
-    (async () => {
-      try {
-        console.log('Started refreshing application (/) commands.');
-
-        await rest.put(Routes.applicationCommands(CLIENT_ID), { body: slashCommands });
-
-        console.log('Successfully reloaded application (/) commands.');
-      } catch (error) {
-        console.error(error);
-      }
-    })();
-
-
+    client.log(`${client.user.username} Aktif Edildi!`);
+    //
+    try {
+      await rest.put(Routes.applicationCommands(client.user.id), {
+        body: client.slashdatas,
+      });
+    } catch (error) {
+      console.error(error);
+    }
   }
-}
-
+};
