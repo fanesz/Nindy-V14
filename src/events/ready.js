@@ -15,8 +15,7 @@ module.exports = {
     }
     botPresence()
 
-    client.log(`${client.user.username} Aktif Edildi!`);
-    //
+    client.log(`${client.user.username} online!`);
     try {
       await rest.put(Routes.applicationCommands(client.user.id), {
         body: client.slashdatas,

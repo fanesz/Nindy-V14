@@ -4,6 +4,8 @@ const client = new Client({
   partials: [Partials.Message, Partials.Channel, Partials.GuildMember, Partials.Reaction, Partials.GuildScheduledEvent, Partials.User, Partials.ThreadMember],
   shards: "auto"
 });
+
+
 const { readdirSync } = require("node:fs");
 const moment = require("moment");
 
@@ -31,13 +33,16 @@ readdirSync("./src/commands/prefix").forEach(async (file) => {
   }
 });
 
+
 // Slash command handler
-const slashcommands = [];
-readdirSync("./src/commands/slash").forEach(async (file) => {
-  const command = await require(`./src/commands/slash/${file}`);
-  client.slashdatas.push(command.data.toJSON());
-  client.slashcommands.set(command.data.name, command);
+readdirSync("./src/commands/slash").forEach(async (dir) => {
+  readdirSync(`./src/commands/slash/${dir}`).forEach(async (file) => {
+    const command = await require(`./src/commands/slash/${dir}/${file}`);
+    client.slashdatas.push(command.data.toJSON());
+    client.slashcommands.set(command.data.name, command);
+  });
 });
+
 
 // Event handler
 readdirSync("./src/events").forEach(async (file) => {
@@ -49,6 +54,10 @@ readdirSync("./src/events").forEach(async (file) => {
   }
 });
 
+
+
+
+
 // Process listeners
 process.on("unhandledRejection", (e) => {
   console.log(e);
@@ -59,5 +68,6 @@ process.on("uncaughtException", (e) => {
 process.on("uncaughtExceptionMonitor", (e) => {
   console.log(e);
 });
+
 
 client.login(process.env.BOT_TOKEN);
