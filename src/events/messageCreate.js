@@ -5,6 +5,7 @@ const cooldown = new Collection()
 
 module.exports = {
   name: Events.MessageCreate,
+  once: false,
   execute: async (message) => {
     if (message.author.bot) return;
     if (message.channel.type === ChannelType.DM) return;
@@ -35,6 +36,8 @@ module.exports = {
       }
     }
 
-    
+
+
+
   }
 };
