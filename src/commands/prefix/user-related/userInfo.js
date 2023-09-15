@@ -1,5 +1,4 @@
-const { EmbedBuilder, PermissionsBitField } = require("discord.js");
-const Database = require("../../../../database.js");
+const { EmbedBuilder } = require("discord.js");
 
 module.exports = {
   name: "user",
@@ -35,7 +34,7 @@ module.exports = {
       return [ageText, formattedDate];
     }
 
-    const userdb = new Database('name_tracker');
+    const userdb = client.db_userInfo
 
     let basecache;
 

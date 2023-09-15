@@ -1,5 +1,4 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
-const Database = require("../../../../database.js");
 const { EmbedBuilder } = require("discord.js");
 
 
@@ -26,9 +25,7 @@ module.exports = {
     const userID = interaction.options.getString("user");
     const ephemeral = interaction.options.getString("reply") == "true" ? true : false;
 
-
     client.cmdlog(interaction.user.username, interaction.commandName, [userID, ephemeral]);
-
 
     function getUserCreated(unixTimestamp) {
       const currentDate = new Date();
@@ -57,7 +54,7 @@ module.exports = {
       return [ageText, formattedDate];
     }
 
-    const userdb = new Database('name_tracker');
+    const userdb = client.db_userInfo
 
     let basecache;
 

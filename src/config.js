@@ -1,5 +1,3 @@
-require("dotenv").config();
-
 module.exports = {
   prefix: "-",
   owner: "278169600728760320",

@@ -5,27 +5,21 @@ const client = new Client({
   shards: "auto"
 });
 
-
+require("dotenv").config();
 const { readdirSync } = require("node:fs");
-const moment = require("moment");
 
-client.commandaliases = new Collection();
+// Utils handler
+const utilsHandler = require("./src/utils/utils.js");
+utilsHandler.run(client);
+
+// database
+const db = require("./database.js");
+db.run(client);
+
+client.commandAliases = new Collection();
 client.commands = new Collection();
-client.slashcommands = new Collection();
-client.slashdatas = [];
-
-
-function log(message) {
-  console.log(`[${moment().format("DD-MM-YYYY HH:mm:ss")}] ${message}`);
-};
-client.log = log;
-
-function cmdlog(executor, command, args) {
-  client.channels.cache.get(process.env.SLASH_CMD_LOG_CHANNEL_ID).send(
-    `\`[${moment().format("HH:mm:ss")}]\` **${executor}** executing \`/${command} ${args.join(' ')}\``
-  );
-};
-client.cmdlog = cmdlog;
+client.slashCommands = new Collection();
+client.slashDatas = [];
 
 // Command handler
 readdirSync("./src/commands/prefix").forEach(async (dir) => {
@@ -35,23 +29,26 @@ readdirSync("./src/commands/prefix").forEach(async (dir) => {
       client.commands.set(command.name, command);
       if (command.aliases && Array.isArray(command.aliases)) {
         command.aliases.forEach((alias) => {
-          client.commandaliases.set(alias, command.name);
+          client.commandAliases.set(alias, command.name);
         });
       }
     }
   });
 });
+// const commandHandler = require("./src/handlers/commands.js");
+// commandHandler.run(client);
 
 
 // Slash command handler
 readdirSync("./src/commands/slash").forEach(async (dir) => {
   readdirSync(`./src/commands/slash/${dir}`).forEach(async (file) => {
     const command = await require(`./src/commands/slash/${dir}/${file}`);
-    client.slashdatas.push(command.data.toJSON());
-    client.slashcommands.set(command.data.name, command);
+    client.slashDatas.push(command.data.toJSON());
+    client.slashCommands.set(command.data.name, command);
   });
 });
-
+// const slashCommandHandler = require("./src/handlers/slashCommands.js");
+// slashCommandHandler.run(client);
 
 // Event handler
 readdirSync("./src/events").forEach(async (file) => {
@@ -62,6 +59,8 @@ readdirSync("./src/events").forEach(async (file) => {
     client.on(event.name, (...args) => event.execute(...args));
   }
 });
+// const eventHandler = require("./src/handlers/events.js");
+// eventHandler.run(client);
 
 
 
