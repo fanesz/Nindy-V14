@@ -79,14 +79,12 @@ module.exports = {
 
     const userboostembed =
       userboost == 'none' ? `**Boost Since**: none \n` :
-        `**Boost Since**: ${userboost[0]} \n` + `**-> **||${userboost[1]}||` + '\n'
+        `**Boost Since**: ${userboost[0]} \n` + `** → **||${userboost[1]}||` + '\n'
 
 
-    const getnickname = (await userdb.get(`${userID}.nickname`) == null) ? [[usernickname, 'abc']] : (await userdb.get(`${userID}.nickname`))
-    let nicknamelist = ''
-    for (let i = 0; i <= getnickname.length - 1; i++) {
-      nicknamelist = nicknamelist + getnickname[i][0] + ' → '
-    }
+    const getnickname = await userdb.get(`${userID}.nickname`);
+    console.log(getnickname);
+    embednickname = '```' + getnickname.map(m => m[0]).join(' → ') + '```';
 
     const embednickname = '```' + nicknamelist.slice(0, -3) + '```'
 
