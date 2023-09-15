@@ -18,19 +18,28 @@ client.slashdatas = [];
 function log(message) {
   console.log(`[${moment().format("DD-MM-YYYY HH:mm:ss")}] ${message}`);
 };
-client.log = log
+client.log = log;
+
+function cmdlog(executor, command, args) {
+  client.channels.cache.get(process.env.SLASH_CMD_LOG_CHANNEL_ID).send(
+    `\`[${moment().format("HH:mm:ss")}]\` **${executor}** executing \`/${command} ${args.join(' ')}\``
+  );
+};
+client.cmdlog = cmdlog;
 
 // Command handler
-readdirSync("./src/commands/prefix").forEach(async (file) => {
-  const command = await require(`./src/commands/prefix/${file}`);
-  if (command) {
-    client.commands.set(command.name, command);
-    if (command.aliases && Array.isArray(command.aliases)) {
-      command.aliases.forEach((alias) => {
-        client.commandaliases.set(alias, command.name);
-      });
+readdirSync("./src/commands/prefix").forEach(async (dir) => {
+  readdirSync(`./src/commands/prefix/${dir}`).forEach(async (file) => {
+    const command = await require(`./src/commands/prefix/${dir}/${file}`);
+    if (command) {
+      client.commands.set(command.name, command);
+      if (command.aliases && Array.isArray(command.aliases)) {
+        command.aliases.forEach((alias) => {
+          client.commandaliases.set(alias, command.name);
+        });
+      }
     }
-  }
+  });
 });
 
 

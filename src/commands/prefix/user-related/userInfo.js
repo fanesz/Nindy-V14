@@ -1,34 +1,12 @@
-const { SlashCommandBuilder } = require("@discordjs/builders");
+const { EmbedBuilder, PermissionsBitField } = require("discord.js");
 const Database = require("../../../../database.js");
-const { EmbedBuilder } = require("discord.js");
-
 
 module.exports = {
-  data: new SlashCommandBuilder()
-    .setName("user")
-    .setDescription("Cek info user, history nickname, dan history username")
-    .addStringOption(option =>
-      option.setName("user")
-        .setDescription("Berupa username / user ID")
-        .setRequired(true)
-    )
-    .addStringOption(option =>
-      option.setName("reply")
-        .setDescription("Menampilkan/menyembunyikan reply message")
-        .setRequired(false)
-        .addChoices(
-          { name: "Hidden", value: "true" },
-          { name: "Show", value: "false" }
-        )
-
-    ),
-  run: async (client, interaction) => {
-    const userID = interaction.options.getString("user");
-    const ephemeral = interaction.options.getString("reply") == "true" ? true : false;
-
-
-    client.cmdlog(interaction.user.username, interaction.commandName, [userID, ephemeral]);
-
+  name: "user",
+  aliases: ["userinfo", "u"],
+  cooldown: 5000,
+  run: async (client, message, args) => {
+    const userID = args[0]
 
     function getUserCreated(unixTimestamp) {
       const currentDate = new Date();
@@ -62,14 +40,16 @@ module.exports = {
     let basecache;
 
     if (isNaN(userID)) {
-      await interaction.channel.guild.members
+      await message.channel.guild.members
         .fetch({ cache: false }).then(members => members
           .find(member => member.user.username === userID)).then((result) => {
             basecache = result
           })
     } else {
-      basecache = await interaction.guild.members.cache.get(userID)
+      basecache = await message.guild.members.cache.get(userID)
     }
+
+    console.log(basecache);
 
     const useravatar = basecache.displayAvatarURL({ format: 'png' })
     const usertag = basecache.user.tag
@@ -135,6 +115,8 @@ module.exports = {
       )
       .setFooter({ text: '-usernickreset (userID) and -usernamereset (userID) to reset nickname/username' })
 
-    await interaction.reply({ embeds: [embed], ephemeral: ephemeral })
+    await message.reply({ embeds: [embed] });
+
   }
 };
+
