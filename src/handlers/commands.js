@@ -5,8 +5,8 @@ const dirPath = path.resolve(__dirname, '../commands/prefix');
 
 module.exports = {
   run: async (client) => {
-    // client.commandAliases = new Collection();
-    // client.commands = new Collection();
+    client.commandaliases = new Collection();
+    client.commands = new Collection();
     readdirSync(dirPath).forEach(async (dir) => {
       readdirSync(`${dirPath}/${dir}`).forEach(async (file) => {
         const command = await require(`${dirPath}/${dir}/${file}`);
@@ -15,7 +15,7 @@ module.exports = {
           client.commands.set(command.name, command);
           if (command.aliases && Array.isArray(command.aliases)) {
             command.aliases.forEach((alias) => {
-              client.commandAliases.set(alias, command.name);
+              client.commandaliases.set(alias, command.name);
             });
           }
         }
