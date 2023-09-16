@@ -11,9 +11,17 @@ module.exports = {
     readdirSync(dirPath).forEach(async (dir) => {
       readdirSync(`${dirPath}/${dir}`).forEach(async (file) => {
         const command = await require(`${dirPath}/${dir}/${file}`);
-        console.log("[load slash command] " + command.data.name);
-        client.slashdatas.push(command.data.toJSON());
-        client.slashcommands.set(command.data.name, command);
+        if(Array.isArray(command.data)){
+          for (let i = 0; i < command.data.length; i++) {
+            console.log("[load slash command] " + command.data[i].name);
+            client.slashdatas.push(command.data[i].toJSON());
+            client.slashcommands.set(command.data[i].name, command);
+          }
+        } else {
+          console.log("[load slash command] " + command.data.name);
+          client.slashdatas.push(command.data.toJSON());
+          client.slashcommands.set(command.data.name, command);
+        }
       });
     });
   }

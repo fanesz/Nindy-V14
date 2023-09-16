@@ -20,14 +20,25 @@ db.run(client);
 const commandHandler = require("./src/handlers/commands.js");
 commandHandler.run(client);
 
-
 // Slash command handler
 const slashCommandHandler = require("./src/handlers/slashCommands.js");
 slashCommandHandler.run(client);
 
 // Event handler
 const eventHandler = require("./src/handlers/events.js");
+const Trakteer = require("./src/classes/Trakteer.js");
+const config = require("./src/config.js");
 eventHandler.run(client);
+
+
+
+const trakteer = new Trakteer({
+  'trakteer-id-session': config.sessionID,
+  'XSRF-TOKEN': config.XSRFToken,
+})
+
+trakteer.get();
+
 
 
 
@@ -35,13 +46,13 @@ eventHandler.run(client);
 
 // Process listeners
 process.on("unhandledRejection", (e) => {
-  console.log(e);
+  client.errlog(e);
 });
 process.on("uncaughtException", (e) => {
-  console.log(e);
+  client.errlog(e);
 });
 process.on("uncaughtExceptionMonitor", (e) => {
-  console.log(e);
+  client.errlog(e);
 });
 
 

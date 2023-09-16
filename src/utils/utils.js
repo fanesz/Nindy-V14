@@ -8,6 +8,7 @@ module.exports = {
   run: async (client) => {
 
     client.log = (message) => console.log(`[${date} ${time}] ${message}`);
+    client.errlog = (message) => { console.log(`[${date} ${time}] ERR`); console.log(message); }
 
     client.cmdlog = (executor, command, args) =>
       client.channels.cache.get(config.slashCMD_LogChannelID)
