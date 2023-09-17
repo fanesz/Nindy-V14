@@ -60,7 +60,7 @@ module.exports = {
     const usercreated = getUserCreated(basecache.user.createdTimestamp)
     const userguildjoin = getUserCreated(basecache.joinedTimestamp)
     const userisbot = basecache.bot ? 'yes' : 'no'
-    const userboost = getUserCreated(basecache.premiumSince) == null ? 'none' : getUserCreated(basecache.premiumSince)
+    const userboost = basecache.premiumSince == null ? 'none' : getUserCreated(basecache.premiumSince)
     const useractivity = basecache.presence?.activities[0]?.name == undefined ? 'none' : basecache.presence?.activities[0]?.name
 
     const userboostembed =
