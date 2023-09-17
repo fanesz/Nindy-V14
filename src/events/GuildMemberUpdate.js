@@ -1,8 +1,9 @@
-const { Events, InteractionType } = require("discord.js");
+const { Events } = require("discord.js");
 const config = require("../config");
 
 module.exports = {
   name: Events.GuildMemberUpdate,
+  once: false,
   execute: async (oldMember, newMember) => {
     const timestamp = Date.now();
     const client = newMember.client;
