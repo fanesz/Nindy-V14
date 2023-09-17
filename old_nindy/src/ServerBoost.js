@@ -9,7 +9,7 @@ module.exports = {
   name: 'ServerBoost',
   description: "ServerBoost command",
   async execute(msg, client) {
-    if (!msg.member.permissions.has("ADMINISTRATOR")) { msg.reply('lu bukan admin lol') };
+    if (!msg.member.permissions.has("ADMINISTRATOR")) { msg.reply('lu bukan admin lol'); return; };
     try {
 
       const guildID = '802865003606310953' // nindy 802867983097004034 | ngck 802865003606310953
@@ -22,7 +22,7 @@ module.exports = {
 
       const background = await Canvas.loadImage(member.displayAvatarURL({ format: 'png', size: 1024 }))
       const background2 = await Canvas.loadImage(
-        path.join(__dirname, '../serverboost3.png'))
+        path.join(__dirname, '../serverboost4.png'))
 
       let x = 0
       let y = 0

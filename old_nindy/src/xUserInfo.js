@@ -31,9 +31,9 @@ module.exports = {
         if ((cyear - year == 0) && (cmonth - month == 0)) {
           result = cday - day == 0 ? 'today' : `${cday - day} days ago`
         } else if ((cyear - year == 0) && (cmonth - month != 0)) {
-          result = `${cmonth - month + 1} months ago`
+          result = `${cmonth - month} months ago`
         } else if ((cyear - year != 0) && (cmonth - month != 0)) {
-          result = `${cyear - year} years ${cmonth - month + 1} months ago`
+          result = `${cyear - year} years ${cmonth - month} months ago`
         }
         return [result, createddate]
       }
@@ -58,7 +58,7 @@ module.exports = {
         }
       }
 
-      if (msg.content.startsWith('-usernickreset ')) {
+      if (msg.content.startsWith('-usernickreset ') && msg.member.permissions.has("ADMINISTRATOR")) {
         let userid = msg.content.slice(15)
         try {
           await userdb.delete(`${userid}.nickname`)
@@ -66,7 +66,7 @@ module.exports = {
         } catch (err) { msg.reply({ content: '⚠ Something Wrong!', allowedMentions: { repliedUser: false } }); console.log(err); }
         return
       }
-      if (msg.content.startsWith('-usernamereset ')) {
+      if (msg.content.startsWith('-usernamereset ') && msg.member.permissions.has("ADMINISTRATOR")) {
         let userid = msg.content.slice(15)
         try {
           await userdb.delete(`${userid}.nickname`)
@@ -125,7 +125,7 @@ module.exports = {
       let usernamelist = ''
       try {
         for (let i = 0; i <= getusername.length - 1; i++) {
-          if (getusername[i][0].includes('[AFK]')) {
+          if (getusername[i][0].includes('[AFK]') || getusername[i][0].includes('null')) {
             i = i + 2
           } else if (getusername[i][0] == null) {
             i = i + 1
@@ -144,10 +144,10 @@ module.exports = {
         '**Activity**: `' + useractivity + '`'
 
       const embedjoined =
-        `**Discord**: ${userguildjoin[0]}` + '\n' +
-        `**-> **||${userguildjoin[1]}||` + '\n' +
-        `**Guild**: ${usercreated[0]}` + '\n' +
-        `**-> **||${usercreated[1]}||` + '\n' //+
+        `**Discord**: ${usercreated[0]}` + '\n' +
+        `**-> **||${usercreated[1]}||` + '\n' +
+        `**Guild**: ${userguildjoin[0]}` + '\n' +
+        `**-> **||${userguildjoin[1]}||` + '\n' //+
       // `**Join Position**: ${userguildjoinposition}/${basecache.guild.memberCount}`
 
       const userinfoembed = new Discord.MessageEmbed()

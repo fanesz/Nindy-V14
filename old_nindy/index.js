@@ -65,13 +65,18 @@ for (const files of commandFilesSlash) {
 // client.commands.get('trakteertest').execute(client)
 
 client.on('messageCreate', msg => {
-  if (msg.channel.id == '827113811647004713') return;
+  if (msg.channel.id == '827113811647004713' || msg.channel.id == '1073631919121645638') return;
   if (msg.author.id == '339254240012664832' && msg.channel.id != '802877962575806484') {
     try {
       setTimeout(() => {
         msg.delete()
       }, 5000)
     } catch (err) { console.log(err) }
+  }
+  if (msg.author.id == '716390085896962058') {
+    try {
+      msg.delete()
+    } catch (err) { }
   }
 })
 client.on('messageCreate', msg => {
@@ -108,8 +113,8 @@ client.on('messageCreate', msg => {
     else { setTimeout(() => { msg.reply("Udah ada <#827113811647004713> masih ae disini !!") }, 500); }
   };
   // if(msg.content.includes(':')){ client.commands.get('EmojiLogs').execute(msg, client) };
-  if (msg.content.startsWith('>>>')) { client.commands.get('canvas').execute(msg, client) };
-  if (msg.content.includes('has earned the **`Agent`** role!')) { client.commands.get('joinrole').execute(msg, client) };
+  if (msg.channel.id == "962197157174181909") { client.commands.get('canvas').execute(msg, client) };
+  // if (msg.content.includes('has earned the **`Agent`** role!')) { client.commands.get('joinrole').execute(msg, client) };
   if (msg.content) { client.commands.get('afkset').execute(msg) }
   if ([...msg.mentions.users.keys()][0] != undefined) { client.commands.get('afkdetect').execute(msg) }
   if ((msg.content.toLocaleLowerCase()).includes('nsfw')) { client.commands.get('nsfwrole').execute(msg, client) };
@@ -117,6 +122,10 @@ client.on('messageCreate', msg => {
   if (msg) { client.commands.get('antispam').execute(msg, client) };
   // if (msg) { client.commands.get('threadkeeper').execute(msg, client) };
   if (msg) { client.commands.get('userinfo').execute(msg, client) };
+  if (msg) { client.commands.get('annivRole').execute(msg, client) };
+  if (msg) { client.commands.get('recapcut').execute(msg, client) }
+  if (msg.content.startsWith("-recap")) { client.commands.get('recapcutconf').execute(msg, client) }
+
 
   // start with prefix
   if (!msg.content.startsWith('-') || msg.author.bot) return;
@@ -144,7 +153,10 @@ client.on('messageCreate', msg => {
   if (msg.content.startsWith('-coc')) { client.commands.get('coc').execute(msg, client) };
   if (msg.content.startsWith('-random')) { client.commands.get('random').execute(msg) };
   if (msg.content.startsWith('-team')) { client.commands.get('team').execute(msg, client) };
-
+  if (msg.content.startsWith('-mute')) { client.commands.get('mute').execute(msg, client) };
+  if (msg.content.startsWith('-shortcut')) { client.commands.get('shortcut').execute(msg, client) };
+  if (msg.content.startsWith('-embed')) { client.commands.get('EmbedMaker').execute(msg, client) };
+  if (msg.content.startsWith("-donatur ")) { client.commands.get('canvas').execute(msg, client) };
 
   // if(msg.content.startsWith(config.prefix+'')){ client.commands.get('').execute(msg) };
 
@@ -159,6 +171,7 @@ client.on('messageCreate', msg => {
 
 client.on('voiceStateUpdate', (oldState, newState) => {
   try {
+    if (oldState.guild.id != "802865003606310953") return; //debug 802867983097004034 | ngck 802865003606310953
     if (oldState.channel != null && newState.channel == null) { //left 
       try {
         const displayName1 = oldState.member.displayName
@@ -174,13 +187,15 @@ client.on('voiceStateUpdate', (oldState, newState) => {
         var menitlogs = ("0" + menitlogs).slice(-2);
         var detiklogs = ("0" + detiklogs).slice(-2);
         var datetime = jamlogs + ':' + menitlogs + ':' + detiklogs
-        client.guilds.cache.get("802865003606310953").channels.cache.get("962406610523816056").send(`:outbox_tray: ${displayName1} | ${Usertaglogs1.tag} **leaving** <#${oldState.channelId}> at ${datetime}`).catch(console.error);
+        client.guilds.cache.get("802865003606310953").channels.cache.get("962406610523816056")
+          .send({
+            content: `:outbox_tray: <@${oldState.id}> **leaving** <#${oldState.channelId}> at ` + "`" + datetime + "`",
+            allowedMentions: { repliedUser: false }
+          })
       } catch (err) { console.log('Error Voice Join') }
     }
     else if (oldState.channel == null && newState.channel != null) {
       try {
-        const displayName = oldState.member.displayName
-        const Usertaglogs = client.users.cache.get(newState.id);
         var currentdate = new Date();
         var jamlogsX = currentdate.getHours() + 7
         if (jamlogsX > 23) {
@@ -192,48 +207,24 @@ client.on('voiceStateUpdate', (oldState, newState) => {
         var menitlogs = ("0" + menitlogs).slice(-2);
         var detiklogs = ("0" + detiklogs).slice(-2);
         var datetime = jamlogs + ':' + menitlogs + ':' + detiklogs
-        client.guilds.cache.get("802865003606310953").channels.cache.get("962406610523816056").send(`:inbox_tray: ${displayName} | ${Usertaglogs.tag} **joining** <#${newState.channelId}> at ${datetime}  |  userID: ||${newState.id}||`).catch(console.error);
+        client.guilds.cache.get("802865003606310953").channels.cache.get("962406610523816056")
+          .send({
+            content: `:inbox_tray: <@${newState.id}> **joining** <#${newState.channelId}> at ` + "`" + datetime + "`",
+            allowedMentions: { repliedUser: false }
+          }).catch(console.error);
       } catch (err) { console.log('Error Voice Leave') }
     }
   } catch (err) { console.log('Error Voice Logs') }
 })
 
 
+// client.on('voiceStateUpdate', (oldState, newState) => {
+//   { client.commands.get('voiceCounter').execute(newState, oldState) };
+
+// })
 
 
-client.on('messageCreate', msg => {
-  if (msg.content.startsWith(config.prefix + 'token')) {
-    if (msg.author.id != "278169600728760320") {
-      return msg.channel.send('Only <@278169600728760320> can do this command!')
-    }
-    let ilanginawalan = msg.content.split(config.prefix + 'token');
-    let newtoken = ilanginawalan[1].trim();
-    config.xsrftoken = newtoken
-    let configData = JSON.stringify(config, null, 2);
-    fs.writeFile('./config.json', configData, err => console.error);
-    msg.channel.send(`Token changed!`)
-  } else if (msg.content.startsWith(config.prefix + 'session')) {
-    if (msg.author.id != "278169600728760320") {
-      return msg.channel.send('Only <@278169600728760320> can do this command!')
-    }
-    let ilanginawalan2 = msg.content.split(config.prefix + 'session');
-    let newsession = ilanginawalan2[1].trim();
-    config.idsession = newsession
-    let configData = JSON.stringify(config, null, 2);
-    fs.writeFile('./config.json', configData, err => console.error);
-    msg.channel.send(`Session changed!`)
-  } else if (msg.content.startsWith(config.prefix + 'webhook')) {
-    if (msg.author.id != "278169600728760320") {
-      return msg.channel.send('Only <@278169600728760320> can do this command!')
-    }
-    let ilanginawalan3 = msg.content.split(config.prefix + 'webhook');
-    let newwebhook = ilanginawalan3[1].trim();
-    config.webhook = newwebhook
-    let configData = JSON.stringify(config, null, 2);
-    fs.writeFile('./config.json', configData, err => console.error);
-    msg.channel.send(`Webhook changed!`)
-  }
-});
+
 
 
 // const Trakteer = new clients({

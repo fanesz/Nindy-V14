@@ -16,7 +16,7 @@ module.exports = {
     try {
 
       const guild = client.guilds.cache.get("802865003606310953"); // nindy 802867983097004034 || ngck 802865003606310953
-      const role = guild.roles.cache.get("802892741355896842") // new role 802873577937698826 || Inspector 802892741355896842
+      const role = guild.roles.cache.get("802892741355896842") // new role 802873577937698826 || Inspector 802892741355896842  
       const member = await guild.members.fetch(msg.author.id)
 
       async function addRole() {
