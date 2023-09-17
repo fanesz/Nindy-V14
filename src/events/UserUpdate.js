@@ -9,9 +9,6 @@ module.exports = {
 
     const userInfo = true;
 
-    console.log(oldMember);
-    console.log(newMember);
-
     // tracking user's personal username and global display name
     if (userInfo) {
       const userdb = client.db_userInfo;
@@ -21,9 +18,9 @@ module.exports = {
       const username_after = newMember.username;
       if (username_before != username_after) {
         if (await userdb.get(`${userid}.username`) == null) {
-          await userdb.set(`${userid}.username`, [[oldMember.username, timestamp]])
+          await userdb.set(`${userid}.username`, [[username_before, timestamp]])
         }
-        userdb.push(`${userid}.username`, [newMember.username, timestamp])
+        userdb.push(`${userid}.username`, [username_after, timestamp])
 
         client.userupdatelog(oldMember.id, username_before, username_after, "username")
       }
@@ -31,11 +28,10 @@ module.exports = {
       const displayName_before = oldMember.globalName || oldMember.username;
       const displayName_after = newMember.globalName || newMember.username;
       if (displayName_before !== displayName_after) {
-        console.log("global name changed");
         if (await userdb.get(`${userid}.displayName`) == null) {
-          await userdb.set(`${userid}.displayName`, [[oldMember.globalName, timestamp]])
+          await userdb.set(`${userid}.displayName`, [[displayName_before, timestamp]])
         }
-        userdb.push(`${userid}.displayName`, [newMember.globalName, timestamp])
+        userdb.push(`${userid}.displayName`, [displayName_after, timestamp])
 
         client.userupdatelog(oldMember.id, displayName_before, displayName_after, "global display name")
       }

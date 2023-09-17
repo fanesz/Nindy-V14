@@ -49,14 +49,16 @@ module.exports = {
         .fetch({ cache: false }).then(members => members
           .find(member => member.user.username === userID)).then((result) => {
             basecache = result
+            userID = basecache.user.id
           })
     } else {
       basecache = await msg_interaction.guild.members.cache.get(userID)
     }
 
     const useravatar = basecache.displayAvatarURL({ format: 'png' })
-    const usertag = basecache.user.tag
+    const username = basecache.user.username
     const usernickname = basecache.displayName
+    const userdisplayname = basecache.globalName
     const usercreated = getUserCreated(basecache.user.createdTimestamp)
     const userguildjoin = getUserCreated(basecache.joinedTimestamp)
     const userisbot = basecache.bot ? 'yes' : 'no'
@@ -68,30 +70,24 @@ module.exports = {
         `**Boost Since**: ${userboost[0]} \n` + `**-> **||${userboost[1]}||` + '\n'
 
 
-    const getnickname = (await userdb.get(`${userID}.nickname`) == null) ? [[usernickname, 'abc']] : (await userdb.get(`${userID}.nickname`))
-    let nicknamelist = ''
-    for (let i = 0; i <= getnickname.length - 1; i++) {
-      nicknamelist = nicknamelist + getnickname[i][0] + ' → '
+
+    const getUserInfo = await userdb.get(`${userID}`);
+
+
+    function createTrackerEmbed(name, current, data) {
+      if (data) {
+        const filteredData = data.filter(item => item[0] !== null).map(item => item[0]).join(' → ');
+        return {
+          name: `${name} Tracker (current: ${current})`,
+          value: '```' + filteredData + '```'
+        };
+      }
+      return null;
     }
 
-    const embednickname = '```' + nicknamelist.slice(0, -3) + '```'
-
-    const getusername = (await userdb.get(`${userID}.username`) == null) ? [[usertag, 'abc']] : (await userdb.get(`${userID}.username`))
-
-    let usernamelist = ''
-    try {
-      for (let i = 0; i <= getusername.length - 1; i++) {
-        if (getusername[i][0].includes('[AFK]')) {
-          i = i + 2
-        } else if (getusername[i][0] == null) {
-          i = i + 1
-        } else {
-          usernamelist = usernamelist + getusername[i][0] + ' → '
-        }
-      }
-    } catch (err) { }
-    const embedusername = '```' + usernamelist.slice(0, -3) + '```'
-
+    const embedusername = createTrackerEmbed("Username", username, getUserInfo.username);
+    const embeddisplayname = createTrackerEmbed("Display Name", userdisplayname, getUserInfo.displayName);
+    const embednickname = createTrackerEmbed("Nickname", usernickname, getUserInfo.nickname);
 
     const embedinformation =
       '**Bot**: ' + userisbot + '\n' +
@@ -106,18 +102,18 @@ module.exports = {
       `**-> **||${userguildjoin[1]}||` + '\n' //+
 
     const embed = new EmbedBuilder()
-      .setAuthor({ name: usertag, iconURL: useravatar, url: `https://discord.com/users/${userID}` })
+      .setAuthor({ name: username, iconURL: useravatar, url: `https://discord.com/users/${userID}` })
       .setThumbnail(useravatar)
       .setColor('#fd46bc')
       .setDescription(`<@${basecache.user.id}>`)
       .addFields(
         { name: 'Information', value: embedinformation, inline: true },
         { name: 'Joined', value: embedjoined, inline: true },
-        { name: `Nickname Tracker (current: ${usernickname})`, value: embednickname },
-        { name: `Username Tracker (current: ${usertag})`, value: embedusername },
       )
       .setFooter({ text: '-usernickreset (userID) and -usernamereset (userID) to reset nickname/username' })
-
+    embedusername && embed.addFields(embedusername);
+    embeddisplayname && embed.addFields(embeddisplayname);
+    embednickname && embed.addFields(embednickname);
     if (interaction !== null) {
       await interaction.reply({ embeds: [embed], ephemeral: ephemeral })
     } else {
