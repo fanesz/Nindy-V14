@@ -7,10 +7,10 @@ module.exports = {
     const timestamp = Date.now();
     const client = newMember.client;
 
-    const userInfo = true;
+    userInfo();
 
     // tracking user's personal username and global display name
-    if (userInfo) {
+    async function userInfo() {
       const userdb = client.db_userInfo;
       const userid = oldMember.id;
 
