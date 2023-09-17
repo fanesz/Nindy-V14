@@ -9,26 +9,35 @@ module.exports = {
 
     const userInfo = true;
 
+    console.log(oldMember);
+    console.log(newMember);
+
     // tracking user's personal username and global display name
     if (userInfo) {
       const userdb = client.db_userInfo;
       const userid = oldMember.id;
 
-      if (oldMember.username !== newMember.username) {
+      const username_before = oldMember.username;
+      const username_after = newMember.username;
+      if (username_before != username_after) {
         if (await userdb.get(`${userid}.username`) == null) {
           await userdb.set(`${userid}.username`, [[oldMember.username, timestamp]])
         }
         userdb.push(`${userid}.username`, [newMember.username, timestamp])
-        client.userupdatelog(newMember.username, oldMember.username, newMember.username, "username")
+
+        client.userupdatelog(oldMember.id, username_before, username_after, "username")
       }
 
-      if (oldMember.globalName !== newMember.globalName) {
+      const displayName_before = oldMember.globalName || oldMember.username;
+      const displayName_after = newMember.globalName || newMember.username;
+      if (displayName_before !== displayName_after) {
         console.log("global name changed");
         if (await userdb.get(`${userid}.displayName`) == null) {
           await userdb.set(`${userid}.displayName`, [[oldMember.globalName, timestamp]])
         }
         userdb.push(`${userid}.displayName`, [newMember.globalName, timestamp])
-        client.userupdatelog(newMember.username, oldMember.globalName, newMember.globalName, "global display name")
+
+        client.userupdatelog(oldMember.id, displayName_before, displayName_after, "global display name")
       }
 
 

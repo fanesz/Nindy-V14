@@ -17,7 +17,7 @@ module.exports = {
 
     client.userupdatelog = (user, oldData, newData, subject) =>
       client.channels.cache.get(config.userUpdate_LogChannelID)
-        .send(`\`[${time}]\` **${user}** changed ${subject} from **${oldData}** to **${newData}**`);
+        .send({content:`\`[${time}]\` <@${user}> changed ${subject} from **${oldData}** to **${newData}**`, allowedMentions: { repliedUser: false }});
 
   }
 };

@@ -26,18 +26,18 @@ slashCommandHandler.run(client);
 
 // Event handler
 const eventHandler = require("./src/handlers/events.js");
-const Trakteer = require("./src/classes/Trakteer.js");
-const config = require("./src/config.js");
 eventHandler.run(client);
 
 
+// const Trakteer = require("./src/classes/Trakteer.js");
+// const config = require("./src/config.js");
 
-const trakteer = new Trakteer({
-  'trakteer-id-session': config.sessionID,
-  'XSRF-TOKEN': config.XSRFToken,
-})
+// const trakteer = new Trakteer({
+//   'trakteer-id-session': config.sessionID,
+//   'XSRF-TOKEN': config.XSRFToken,
+// })
 
-trakteer.get();
+// trakteer.get();
 
 
 
@@ -56,4 +56,4 @@ process.on("uncaughtExceptionMonitor", (e) => {
 });
 
 
-client.login(process.env.BOT_TOKEN);
+client.login(process.env.DEPLOY_CONTEXT === 'dev' ? process.env.DEV_BOT_TOKEN : process.env.BOT_TOKEN);
