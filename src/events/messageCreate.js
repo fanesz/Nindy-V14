@@ -13,9 +13,10 @@ module.exports = {
     const client = message.client;
     const prefix = config.prefix
 
-    const registeredCommand = true;
+    const registerCommands = true;
+    const autoDeleteAmariBotMessage = true;
 
-    if (registeredCommand) {
+    if (registerCommands) {
       if (!message.content.startsWith(prefix)) return;
       const args = message.content.slice(prefix.length).trim().split(/ +/g);
       const cmd = args.shift().toLowerCase();
@@ -36,7 +37,21 @@ module.exports = {
       }
     }
 
+    if (autoDeleteAmariBotMessage) {
+      const ignoreChannel = [
+        '802865004239126541',  // #admin-chat
+        '802877962575806484',  // #admin-commands
+        '981498267948941342',  // #staff-chat
+        '1077907820973928459', // #staff-commands
+        '827113811647004713',  // #bot-commands
 
+      ]
+      if (message.author.id == '339254240012664832' && ignoreChannel.indexOf(message.channel.id) == -1) {
+        setTimeout(() => {
+          message.delete();
+        }, 3000)
+      }
+    }
 
 
   }
