@@ -69,10 +69,7 @@ module.exports = {
       userboost == 'none' ? `**Boost Since**: none \n` :
         `**Boost Since**: ${userboost[0]} \n` + `**-> **||${userboost[1]}||` + '\n'
 
-
-
     const getUserInfo = await userdb.get(`${userID}`);
-
 
     function createTrackerEmbed(name, current, data) {
       if (data) {
@@ -85,9 +82,9 @@ module.exports = {
       return null;
     }
 
-    const embedusername = createTrackerEmbed("Username", username, getUserInfo.username);
-    const embeddisplayname = createTrackerEmbed("Display Name", userdisplayname, getUserInfo.displayName);
-    const embednickname = createTrackerEmbed("Nickname", usernickname, getUserInfo.nickname);
+    const embedusername = getUserInfo && getUserInfo.username && createTrackerEmbed("Username", username, getUserInfo.username);
+    const embeddisplayname = getUserInfo && getUserInfo.displayName && createTrackerEmbed("Display Name", userdisplayname, getUserInfo.displayName);
+    const embednickname = getUserInfo && getUserInfo.nickname && createTrackerEmbed("Nickname", usernickname, getUserInfo.nickname);
 
     const embedinformation =
       '**Bot**: ' + userisbot + '\n' +
