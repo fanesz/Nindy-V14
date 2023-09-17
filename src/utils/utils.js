@@ -1,11 +1,23 @@
-class Utils {
-  constructor(client) {
-    this.client = client;
-  }
-  
-  async getAllMember() {
-    return await this.client.guilds.cache.get("802867983097004034").members.cache.map(m => ({ name: m.user.username, value: m.user.id }))
-  }
-}
+const moment = require("moment");
+const config = require("../config");
+const date = moment().format("DD-MM-YYYY");
+const time = moment().format("HH:mm:ss");
 
-module.exports = Utils;
+
+module.exports = {
+  run: async (client) => {
+
+    client.log = (message) => console.log(`[${date} ${time}] ${message}`);
+    client.errlog = (message) => { console.log(`[${date} ${time}] ERR`); console.log(message); }
+
+    client.cmdlog = (executor, command, args) =>
+      client.channels.cache.get(config.slashCMD_LogChannelID)
+        .send(`\`[${time}]\` **${executor}** executing \`/${command} ${args.join(' ')}\``);
+
+
+    client.userupdatelog = (user, oldData, newData, subject) =>
+      client.channels.cache.get(config.userUpdate_LogChannelID)
+        .send({content:`\`[${time}]\` <@${user}> changed ${subject} from **${oldData}** to **${newData}**`, allowedMentions: { repliedUser: false }});
+
+  }
+};

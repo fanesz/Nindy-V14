@@ -1,14 +1,8 @@
 const { QuickDB } = require('quick.db');
+const db = new QuickDB();
 
-class Database {
-  constructor(table) {
-    if (!Database.instance) {
-      const db = new QuickDB();
-      this[table] = db.table(table);
-      Database.instance = this;
-    }
-    return Database.instance[table];
+module.exports = {
+  run: async (client) => {
+    client.db_userInfo = db.table('user_info');
   }
-}
-
-module.exports = Database;
+};
