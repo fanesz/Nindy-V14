@@ -2,6 +2,7 @@ const { Events, InteractionType } = require("discord.js");
 
 module.exports = {
   name: Events.InteractionCreate,
+  once: true,
   execute: async (interaction) => {
     let client = interaction.client;
     if (interaction.type === InteractionType.ApplicationCommand) {

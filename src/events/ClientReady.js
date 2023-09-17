@@ -1,4 +1,4 @@
-const { ActivityType, Events } = require("discord.js")
+const { Events } = require("discord.js")
 const { REST } = require("@discordjs/rest");
 const { Routes } = require("discord-api-types/v10");
 
