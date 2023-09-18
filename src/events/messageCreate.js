@@ -172,7 +172,7 @@ module.exports = {
         userset.add(message.author.id + message.content);
         setTimeout(() => {
           userset.delete(message.author.id + message.content);
-        }, 2000)
+        }, 5000)
       }
 
 
