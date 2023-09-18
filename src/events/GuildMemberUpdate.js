@@ -8,11 +8,10 @@ module.exports = {
     const timestamp = Date.now();
     const client = newMember.client;
 
-    const userInfo = true;
-
+    userInfo();
 
     // tracking user's server nickname
-    if (userInfo) {
+    async function userInfo() {
       const userdb = client.db_userInfo;
       const userid = oldMember.id;
       if (newMember.guild.id !== config.guildID) return;

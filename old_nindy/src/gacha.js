@@ -50,6 +50,8 @@ module.exports = {
         let yoimiya = "https://i.imgur.com/nbKX8mt.jpg"
         let ganyu = "https://i.imgur.com/v27baQ5.png"
         let kokomi = "https://i.imgur.com/Pfed70V.png"
+        let nilou = "https://i.imgur.com/HK5C8Ix.png"
+        let nahida = "https://i.imgur.com/U85CuTJ.png"
 
         //rate off
         let keqing = "https://i.imgur.com/Xvk63dg.png"
@@ -59,20 +61,20 @@ module.exports = {
         let jean = "https://i.imgur.com/7foE4Pq.png"
 
         let charab5 = [
-          ganyu, keqing,
-          ganyu, qiqi,
-          ganyu, diluc,
-          ganyu, mona,
-          ganyu, jean,
-          kokomi, keqing,
-          kokomi, qiqi,
-          kokomi, diluc,
-          kokomi, mona,
-          kokomi, jean
+          nahida, keqing,
+          nahida, qiqi,
+          nahida, diluc,
+          nahida, mona,
+          nahida, jean,
+          yoimiya, keqing,
+          yoimiya, qiqi,
+          yoimiya, diluc,
+          yoimiya, mona,
+          yoimiya, jean
         ]
         var result = charab5[Math.floor(Math.random() * charab5.length)];
-        if (result == ganyu) { resultdesc = 'WIN' }
-        else if (result == kokomi) { resultdesc = 'WIN' }
+        if (result == nahida) { resultdesc = 'WIN' }
+        else if (result == yoimiya) { resultdesc = 'WIN' }
 
         else { resultdesc = 'LOSE' }
 

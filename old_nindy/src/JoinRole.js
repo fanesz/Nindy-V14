@@ -10,11 +10,10 @@ try{
         let onlyid = onlyid0.replace('**', '')
 
 
-        const guild = client.guilds.cache.get("802865003606310953");
-        const role = guild.roles.cache.get("940237965689503774")
-        const member = await guild.members.fetch(onlyid)
-
-        await member.roles.add(role)
+const guild = client.guilds.cache.get("802865003606310953");
+const role = guild.roles.cache.get("940237965689503774")
+const member = await guild.members.fetch(onlyid)
+await member.roles.add(role)
 
 
 } catch(err){console.log(err)}

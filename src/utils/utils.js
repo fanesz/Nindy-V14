@@ -29,5 +29,13 @@ module.exports = {
           allowedMentions: { repliedUser: false }
         });
 
+    client.spamlog = (user, channel) =>
+      client.channels.cache.get(config.voice_LogChannelID)
+        .send({
+          content:
+            `\`[${time}]\` :exclamation: <@${user}> detected spamming at <#${channel}>`,
+          allowedMentions: { repliedUser: false }
+        });
+
   }
 };
