@@ -1,4 +1,4 @@
-const { ChannelType, Collection, Events } = require("discord.js")
+const { ChannelType, Collection, Events, PermissionsBitField } = require("discord.js")
 const config = require("../config.js")
 const ms = require("ms")
 const cooldown = new Collection();
@@ -86,12 +86,12 @@ module.exports = {
         '1101681245840228402', // Fesbuk Staff
         '802866779516960778', // Bots
         '1100630419659038751', // Playground Bots
-        '803908099629907990'
+        // '803908099629907990' // debug
       ]
 
       if (ignoreChannel.indexOf(message.channel.id) !== -1) return;
       if (message.member.roles.cache.find(r => ignoreRole.indexOf(r.id) !== -1)) return;
-      if (message.member.permissions.has('ADMINISTRATOR')) return;
+      if (message.member.permissionsIn(message.channel.id).has(PermissionsBitField.Flags.Administrator)) return;
 
       const spamDetected = async (user, channel) => {
         const guild = client.guilds.cache.get(config.guildID);
