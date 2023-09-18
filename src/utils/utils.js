@@ -30,7 +30,7 @@ module.exports = {
         });
 
     client.spamlog = (user, channel) =>
-      client.channels.cache.get(config.voice_LogChannelID)
+      client.channels.cache.get(config.muted_LogChannelID)
         .send({
           content:
             `\`[${time}]\` :exclamation: <@${user}> detected spamming at <#${channel}>`,
