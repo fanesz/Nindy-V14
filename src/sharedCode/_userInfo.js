@@ -1,5 +1,7 @@
 const { EmbedBuilder } = require("discord.js");
 
+// todo: kalo command di server debug, ttp retrive member dari ntc
+
 module.exports = {
   name: "userInfo",
   run: async (client, message, args, interaction) => {
