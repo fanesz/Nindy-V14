@@ -3,12 +3,13 @@ const config = require("../config.js")
 const ms = require("ms")
 const cooldown = new Collection();
 
-const userset = new Set();
-const spamset = new Set();
-const usersetsticker = new Set();
-const spamsetsticker = new Set();
 const usersetimg = new Set();
 const spamsetimg = new Set();
+const usersetsticker = new Set();
+const spamsetsticker = new Set();
+const userset = new Set();
+const spamset = new Set();
+
 
 module.exports = {
   name: Events.MessageCreate,
@@ -21,10 +22,9 @@ module.exports = {
     const prefix = config.prefix;
 
 
-
     registerCommands();
     autoDeleteAmariBotMessage();
-    autoSpam();
+    antiSpam();
 
     function registerCommands() {
       if (!message.content.startsWith(prefix)) return;
@@ -48,7 +48,7 @@ module.exports = {
     }
 
     function autoDeleteAmariBotMessage() {
-      if (message.guildId !== config.guildID) return;
+      if (message.guildId !== config.guildID || message.author.id != '339254240012664832') return;
       const ignoreChannel = [
         '802865004239126541',  // #admin-chat
         '802877962575806484',  // #admin-commands
@@ -56,17 +56,14 @@ module.exports = {
         '1077907820973928459', // #staff-commands
         '827113811647004713',  // #bot-commands
       ]
-      if (message.author.id == '339254240012664832' && ignoreChannel.indexOf(message.channel.id) == -1) {
+      if (ignoreChannel.indexOf(message.channel.id) == -1) {
         setTimeout(() => {
           message.delete();
         }, 3000)
       }
     }
 
-    async function autoSpam() {
-
-      // to do : filter by role admin (karena error missing perms)
-
+    async function antiSpam() {
       if (message.guildId !== config.guildID) return;
       const ignoreChannel = [
         '802920713710600262',  // #bot-mudae
@@ -79,132 +76,106 @@ module.exports = {
         '981498267948941342',  // #staff-chat
         '1077907820973928459', // #staff-commands
       ];
-      const ignoreUser = [
+      const ignoreRole = [
+        '1033942560814678026', // CEO
+        '802874936749588550', // CEO
+        '1101680918214746143', // COO
+        '992790117460738139', // Administrator
+        '802874710693773352', // ModBot
+        '802865745238294528', // Staff
+        '1101681245840228402', // Fesbuk Staff
+        '802866779516960778', // Bots
+        '1100630419659038751', // Playground Bots
+        '803908099629907990'
+      ]
 
-      ];
-      const muteRole = async (userid) => {
+      if (ignoreChannel.indexOf(message.channel.id) !== -1) return;
+      if (message.member.roles.cache.find(r => ignoreRole.indexOf(r.id) !== -1)) return;
+      if (message.member.permissions.has('ADMINISTRATOR')) return;
+
+      const spamDetected = async (user, channel) => {
         const guild = client.guilds.cache.get(config.guildID);
         const role = guild.roles.cache.get(config.mute_RoleID)
-        const member = await guild.members.fetch(userid)
-        await member.roles.add(role)
+        const member = await guild.members.fetch(user)
+        await member.roles.add(role);
         setTimeout(async () => {
-          await member.roles.remove(role)
-        }, 10000)
+          await member.roles.remove(role);
+        }, 10000);
+
+        message.channel.send(`<@${user}>, muted 10s! no spam ngab <:nindy_ho:977817574500859944>`);
+        client.spamlog(user, channel);
       }
 
-      if (ignoreChannel.indexOf(message.channel.id) == -1 && ignoreUser.indexOf(message.author.id) == -1) {
-
-        // image di send sekaligus, lebih dari 3 
-        const imgobj = Object.fromEntries(message.attachments)
+      // Image
+      if (message.attachments.size !== 0) {
+        // sekaligus dikirim lebih dari 3 image
         if (message.attachments.size >= 3) {
-          let imgName = []
-          let imgSize = []
-          let imgWidth = []
-          let imgHeight = []
-          for (i = 0; i <= message.attachments.size - 1; i++) {
+          let imgName = []; let imgSize = []; let imgWidth = []; let imgHeight = [];
+          Object.values(Object.fromEntries(message.attachments)).map((img) => {
+            imgName.push(img.attachment.split('/')[6]);
+            imgSize.push(img.size);
+            imgWidth.push(img.width);
+            imgHeight.push(img.height);
+          });
 
-            let imgNameraw = (Object.values(imgobj)[i]).attachment.split('/')[6]
-            let imgSizeRaw = (Object.values(imgobj)[i]).size
-            let imgWidthRaw = (Object.values(imgobj)[i]).width
-            let imgHeightRaw = (Object.values(imgobj)[i]).height
-
-            // console.log((Object.values(imgobj)[i]));
-
-            imgName.push(imgNameraw)
-            imgSize.push(imgSizeRaw)
-            imgWidth.push(imgWidthRaw)
-            imgHeight.push(imgHeightRaw)
-
-          }
-          console.log(imgSize);
-          console.log(imgWidth);
-          console.log(imgHeight);
           if (!(new Set(imgSize).size !== 1 || new Set(imgWidth).size !== 1 || new Set(imgHeight).size !== 1)) {
-            console.log("SPAMM");
-            // await client.guilds.cache.get(guildIDs).channels.cache.get(channelIDs).send('`[' + getData() + ']` :exclamation: ' + `**${message.author.tag}** detected spamming at <#${message.channelId}>`)
-            await message.delete()
-            message.channel.send(`<@${message.author.id}>, muted! no spam ngab <:nindy_ho:977817574500859944>`).then((m) => {
-              setTimeout(() => {
-                m.delete()
-              }, 5000)
-            })
+            spamDetected(message.author.id, message.channelId);
           }
+          // di send spam minimal 3x
         } else if (message.attachments.size == 1) {
-          let imgSize = (Object.values(imgobj)[0]).size
+          let imgSize = (Object.values(Object.fromEntries(message.attachments))[0]).size;
           if (usersetimg.has(message.author.id + imgSize)) {
             if (spamsetimg.has(message.author.id)) {
-              // await client.guilds.cache.get(guildIDs).channels.cache.get(channelIDs).send('`[' + getData() + ']` :exclamation: ' + `**${message.author.tag}** detected spamming at <#${message.channelId}>`)
-              muteRole(message.author.id)
-              await message.delete()
-              message.channel.send(`<@${message.author.id}>, chill ngab! no spam <:nindy_ho:977817574500859944>`).then((m) => {
-                setTimeout(() => {
-                  m.delete()
-                }, 20000)
-              })
-              spamsetimg.delete(message.author.id)
-              usersetimg.delete(message.author.id + imgSize)
+              spamDetected(message.author.id, message.channelId);
+              spamsetimg.delete(message.author.id);
+              usersetimg.delete(message.author.id + imgSize);
             } else {
-              spamsetimg.add(message.author.id)
+              spamsetimg.add(message.author.id);
             }
           } else {
-            usersetimg.add(message.author.id + imgSize)
+            usersetimg.add(message.author.id + imgSize);
             setTimeout(() => {
-              usersetimg.delete(message.author.id + imgSize)
-            }, 2000)
+              usersetimg.delete(message.author.id + imgSize);
+            }, 4000)
           }
         }
-
-        // sticker
-        // const stickerobj = Object.fromEntries(message.stickers)
-        // if (message.stickers.size >= 1) {
-        //   let stickerID = Object.values(stickerobj)[0].id
-        //   if (usersetsticker.has(message.author.id + stickerID)) {
-        //     if (spamsetsticker.has(message.author.id)) {
-        //       // await client.guilds.cache.get(guildIDs).channels.cache.get(channelIDs).send('`[' + getData() + ']` :exclamation: ' + `**${message.author.tag}** detected spamming at <#${message.channelId}>`)
-        //       muteRole(message.author.id)
-        //       await message.delete()
-        //       message.channel.send(`<@${message.author.id}>, muted! no spam ngab <:nindy_ho:977817574500859944>`).then((m) => {
-        //         setTimeout(() => {
-        //           m.delete()
-        //         }, 20000)
-        //       })
-        //     } else {
-        //       spamsetsticker.add(message.author.id)
-        //     }
-        //   } else {
-        //     usersetsticker.add(message.author.id + message.content)
-        //     setTimeout(() => {
-        //       usersetsticker.delete(message.author.id + message.content)
-        //       spamsetsticker.delete(message.author.id)
-        //     }, 10000)
-        //   }
-        // }
-
-        // gif / normal message
-        // if (userset.has(message.author.id + message.content)) {
-        //   if (spamset.has(message.author.id)) {
-        //     // await client.guilds.cache.get(guildIDs).channels.cache.get(channelIDs).send('`[' + getData() + ']` :exclamation: ' + `**${message.author.tag}** detected spamming at <#${message.channelId}>`)
-        //     muteRole(message.author.id)
-        //     await message.delete()
-        //     message.channel.send(`<@${message.author.id}>, muted! no spam ngab <:nindy_ho:977817574500859944>`).then((m) => {
-        //       setTimeout(() => {
-        //         m.delete()
-        //       }, 20000)
-        //     })
-        //     spamset.delete(message.author.id)
-        //     userset.delete(message.author.id + message.content)
-        //   } else {
-        //     spamset.add(message.author.id)
-        //   }
-        // } else {
-        //   userset.add(message.author.id + message.content)
-        //   setTimeout(() => {
-        //     userset.delete(message.author.id + message.content)
-        //   }, 2000)
-        // }
-
-
       }
+
+      // Sticker
+      if (message.stickers.size !== 0) {
+        let stickerID = Object.values(Object.fromEntries(message.stickers))[0].id;
+        if (usersetsticker.has(message.author.id + stickerID)) {
+          if (spamsetsticker.has(message.author.id)) {
+            spamDetected(message.author.id, message.channelId);
+          } else {
+            spamsetsticker.add(message.author.id);
+          }
+        } else {
+          usersetsticker.add(message.author.id + message.content);
+          setTimeout(() => {
+            usersetsticker.delete(message.author.id + message.content);
+            spamsetsticker.delete(message.author.id);
+          }, 10000)
+        }
+      }
+
+      // Normal Msg / GIF
+      if (userset.has(message.author.id + message.content)) {
+        if (spamset.has(message.author.id)) {
+          spamDetected(message.author.id, message.channelId);
+          spamset.delete(message.author.id);
+          userset.delete(message.author.id + message.content);
+        } else {
+          spamset.add(message.author.id);
+        }
+      } else {
+        userset.add(message.author.id + message.content);
+        setTimeout(() => {
+          userset.delete(message.author.id + message.content);
+        }, 2000)
+      }
+
+
     }
 
 
