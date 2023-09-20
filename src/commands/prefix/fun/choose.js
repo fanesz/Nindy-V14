@@ -1,5 +1,4 @@
 const _choose = require("../../../sharedCode/_choose");
-const _say = require("../../../sharedCode/_say");
 
 module.exports = {
   name: "choose",

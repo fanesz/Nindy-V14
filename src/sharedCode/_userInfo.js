@@ -45,16 +45,16 @@ module.exports = {
     const userdb = client.db_userInfo
     let basecache;
 
-    const msg_interaction = interaction ? interaction : message
+    const commandType = interaction ? interaction : message
     if (isNaN(userID)) {
-      await msg_interaction.channel.guild.members
+      await commandType.channel.guild.members
         .fetch({ cache: false }).then(members => members
           .find(member => member.user.username === userID)).then((result) => {
             basecache = result
             userID = basecache.user.id
           })
     } else {
-      basecache = await msg_interaction.guild.members.cache.get(userID)
+      basecache = await commandType.guild.members.cache.get(userID)
     }
 
     const useravatar = basecache.displayAvatarURL({ format: 'png' })
