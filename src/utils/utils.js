@@ -9,7 +9,7 @@ module.exports = {
 
     client.cmdlog = (executor, command, args) =>
       client.channels.cache.get(config.slashCMD_LogChannelID)
-        .send(`\`[${moment().format("HH:mm:ss")}]\` **${executor}** executing \`/${command} ${args.join(' ')}\``);
+        .send(`\`[${moment().format("HH:mm:ss")}]\` **${executor}** executing \`/${command} ${args?.join(' ')}\``);
 
     client.userupdatelog = (user, oldData, newData, subject) =>
       client.channels.cache.get(config.userUpdate_LogChannelID)
