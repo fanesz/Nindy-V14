@@ -34,5 +34,17 @@ module.exports = {
           allowedMentions: { repliedUser: false }
         });
 
+  },
+  replyMessage: (commandType, content, embed, ephemeral, repliedUser) => {
+    const replyOptions = {
+      content: content,
+      ephemeral: ephemeral,
+      allowedMentions: { repliedUser: repliedUser }
+    };
+    if (embed) {
+      replyOptions.embeds = [embed];
+    }
+    commandType.reply(replyOptions);
   }
+
 };

@@ -1,48 +1,26 @@
 const { EmbedBuilder } = require("discord.js");
 const config = require("../config");
+const { replyMessage } = require("../utils/utils");
 
 module.exports = {
   name: "random",
   run: async (client, message, args, interaction) => {
     let targetNumber;
-
-
-
     if (interaction !== null) { // slash
-      targetNumber = interaction.options.getString("content");
-      client.cmdlog(interaction.user.username, interaction.commandName, [content, ephemeral]);
+      targetNumber = interaction.options.getString("number");
+      client.cmdlog(interaction.user.username, interaction.commandName, [targetNumber]);
     } else { // prefix
       targetNumber = args[0] || undefined;
-    }
+    };
 
-    const commandType = interaction ? interaction : message;
+    if (!targetNumber || isNaN(targetNumber) === true || targetNumber < 1) return;
 
-    if (!targetNumber || isNaN(targetNumber) === true || targetNumber < 1) {
+    const result = Math.floor(Math.random() * targetNumber) + 1;
+    const embed = new EmbedBuilder()
+      .setColor(config.embedColor)
+      .setDescription(`Random Number 1 ~ ${targetNumber} = **${result}**`);
 
-      msg.reply('`-random (angka)` - untuk random generator angka 1-(angka)');
-      return;
-    }
-
-    console.log(commandType);
-
-    const replyMessage = (commandType, message, ephemeral) => {
-      if (commandType === interaction) {
-        commandType.reply({ content: message, ephemeral: ephemeral });
-      } else {
-        commandType.channel.send(message);
-      }
-    }
-
-
-
-
-    const createEmbed = () => {
-      const result = Math.floor(Math.random() * args[0]) + 1;
-      return embed = new EmbedBuilder()
-        .setColor(config.embedColor)
-        .setDescription(`Random Number 1 - ${args[0]} = **${result}**`)
-    }
-
+    replyMessage(interaction || message, '', embed, false, true);
 
   }
 };

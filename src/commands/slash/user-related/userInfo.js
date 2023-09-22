@@ -21,7 +21,6 @@ module.exports = {
           { name: "Hidden", value: "true" },
           { name: "Show", value: "false" }
         )
-
     ),
   run: async (client, interaction) => {
     _userInfo.run(client, null, null, interaction)

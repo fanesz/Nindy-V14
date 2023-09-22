@@ -1,4 +1,5 @@
 const { EmbedBuilder } = require("discord.js");
+const { replyMessage } = require("../utils/utils");
 
 // todo: kalo command di server debug, ttp retrive member dari ntc
 
@@ -113,11 +114,7 @@ module.exports = {
     embedusername && embed.addFields(embedusername);
     embeddisplayname && embed.addFields(embeddisplayname);
     embednickname && embed.addFields(embednickname);
-    if (interaction !== null) {
-      await interaction.reply({ embeds: [embed], ephemeral: ephemeral })
-    } else {
-      await message.reply({ embeds: [embed] });
-    }
+    replyMessage(commandType, '', embed, ephemeral, true);
   }
 };
 
