@@ -20,7 +20,7 @@ module.exports = {
 
     const randomBintang = listBintang[Math.floor(Math.random() * listBintang.length)];
 
-    if (interaction !== null) { // slash
+    if (interaction) { // slash
       client.cmdlog(interaction.user.username, interaction.commandName, ['']);
       await interaction.reply(`:drum:`)
       setTimeout(async () => {

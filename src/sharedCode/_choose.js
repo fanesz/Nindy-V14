@@ -1,17 +1,20 @@
+const { replyMessage } = require("../utils/utils");
+
 module.exports = {
   name: "choose",
   run: async (client, message, args, interaction) => {
     const randomItem = (item) => item[Math.floor(Math.random() * item.length)];
 
-    if (interaction !== null) { // slash
-      const item = interaction.options.getString("item").split(' ');
-      client.cmdlog(interaction.user.username, interaction.commandName, [item.join(' ')]);
-      interaction.reply(`<:nindy_yes:977817511821213757> Nindy pilih **${randomItem(item)}**`)
+    let items;
+    if (interaction) { // slash
+      const itemString = interaction.options.getString("item");
+      client.cmdlog(interaction.user.username, interaction.commandName, [itemString]);
+      items = itemString.split(" ");
     } else { // prefix
-      message.reply({
-        content: `<:nindy_yes:977817511821213757> Nindy pilih **${randomItem(args)}**`, allowedMentions: { repliedUser: false }
-      })
-    }
+      items = args;
+    };
+
+    replyMessage(interaction || message, `<:nindy_yes:977817511821213757> Nindy pilih **${randomItem(items)}**`, null, false, true);
 
   }
 };

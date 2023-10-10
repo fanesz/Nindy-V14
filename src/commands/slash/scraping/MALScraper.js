@@ -1,16 +1,14 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
-const { EmbedBuilder } = require("discord.js");
-const _userInfo = require("../../../sharedCode/_userInfo");
-
-
+const _MALScraper = require("../../../sharedCode/_MALScraper");
+const { ActionRowBuilder } = require("discord.js");
 
 module.exports = {
-  data: new SlashCommandBuilder()
-    .setName("user")
-    .setDescription("Cek info user, history nickname, dan history username")
+  data: [new SlashCommandBuilder()
+    .setName("anime")
+    .setDescription("Scraping data anime dari MyAnimeList")
     .addStringOption(option =>
-      option.setName("user")
-        .setDescription("Berupa username / user ID")
+      option.setName("title")
+        .setDescription("Judul anime yang ingin di cari")
         .setRequired(true)
     )
     .addStringOption(option =>
@@ -22,7 +20,10 @@ module.exports = {
           { name: "Show", value: "false" }
         )
     ),
+
+  ],
+
   run: async (client, interaction) => {
-    _userInfo.run(client, null, null, interaction)
+    _MALScraper.run(client, null, null, interaction)
   }
 };

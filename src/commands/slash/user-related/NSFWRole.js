@@ -1,18 +1,10 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
-const { EmbedBuilder } = require("discord.js");
-const _userInfo = require("../../../sharedCode/_userInfo");
-
-
+const _NSFWRole = require("../../../sharedCode/_NSFWRole");
 
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName("user")
-    .setDescription("Cek info user, history nickname, dan history username")
-    .addStringOption(option =>
-      option.setName("user")
-        .setDescription("Berupa username / user ID")
-        .setRequired(true)
-    )
+    .setName("nsfw")
+    .setDescription("Add/Remove role NSFW (inspector)")
     .addStringOption(option =>
       option.setName("reply")
         .setDescription("Menampilkan/menyembunyikan reply message")
@@ -23,6 +15,6 @@ module.exports = {
         )
     ),
   run: async (client, interaction) => {
-    _userInfo.run(client, null, null, interaction)
+    _NSFWRole.run(client, null, null, interaction)
   }
 };

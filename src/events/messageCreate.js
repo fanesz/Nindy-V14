@@ -56,7 +56,7 @@ module.exports = {
         '1077907820973928459', // #staff-commands
         '827113811647004713',  // #bot-commands
       ]
-      if (ignoreChannel.indexOf(message.channel.id) == -1) {
+      if (!ignoreChannel.indexOf(message.channel.id)) {
         setTimeout(() => {
           message.delete();
         }, 3000)
