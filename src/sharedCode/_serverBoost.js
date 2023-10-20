@@ -18,7 +18,7 @@ module.exports = {
     };
 
     let basecache;
-    const commandType = interaction ? interaction : message
+    const commandType = interaction || message;
     try {
       if (isNaN(userID)) {
         await commandType.channel.guild.members

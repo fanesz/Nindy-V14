@@ -13,14 +13,18 @@ module.exports = {
       targetNumber = args[0] || undefined;
     };
 
-    if (!targetNumber || isNaN(targetNumber) === true || targetNumber < 1) return;
+    const commandType = interaction || message;
+
+    if (!targetNumber || isNaN(targetNumber) === true || targetNumber < 1) {
+      return client.errReply(commandType, '`-random (angka)`')
+    };
 
     const result = Math.floor(Math.random() * targetNumber) + 1;
     const embed = new EmbedBuilder()
       .setColor(config.embedColor)
       .setDescription(`Random Number 1 ~ ${targetNumber} = **${result}**`);
 
-    replyMessage(interaction || message, '', embed, false, true);
+    replyMessage(commandType, '', embed, false, true);
 
   }
 };

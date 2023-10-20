@@ -1,8 +1,6 @@
 const { EmbedBuilder } = require("discord.js");
 const { replyMessage } = require("../utils/utils");
 
-// todo: kalo command di server debug, ttp retrive member dari ntc
-
 module.exports = {
   name: "userInfo",
   run: async (client, message, args, interaction) => {
@@ -14,7 +12,7 @@ module.exports = {
       client.cmdlog(interaction.user.username, interaction.commandName, [userID, ephemeral]);
     } else {
       userID = args[0]
-    }
+    };
 
     function getUserCreated(unixTimestamp) {
       const currentDate = new Date();
@@ -41,36 +39,40 @@ module.exports = {
       const formattedDate = `${userDate.getDate()}/${userDate.getMonth() + 1}/${userDate.getFullYear()}, ${userDate.toLocaleTimeString()}`;
 
       return [ageText, formattedDate];
-    }
+    };
 
-    const userdb = client.db_userInfo
+    const userdb = client.db_userInfo;
     let basecache;
 
-    const commandType = interaction ? interaction : message
-    if (isNaN(userID)) {
-      await commandType.channel.guild.members
-        .fetch({ cache: false }).then(members => members
-          .find(member => member.user.username === userID)).then((result) => {
-            basecache = result
-            userID = basecache.user.id
-          })
-    } else {
-      basecache = await commandType.guild.members.cache.get(userID)
-    }
+    const commandType = interaction || message;
+    try {
+      if (isNaN(userID)) {
+        await commandType.channel.guild.members
+          .fetch({ cache: false }).then(members => members
+            .find(member => member.user.username === userID)).then((result) => {
+              basecache = result
+              userID = basecache.user.id
+            })
+      } else {
+        basecache = await commandType.guild.members.cache.get(userID)
+      };
+    } catch (err) {
+      return client.errReply(commandType, 'UserID / Username not found!');
+    };
 
-    const useravatar = basecache.displayAvatarURL({ format: 'png' })
-    const username = basecache.user.username
-    const usernickname = basecache.displayName
-    const userdisplayname = basecache.globalName
-    const usercreated = getUserCreated(basecache.user.createdTimestamp)
-    const userguildjoin = getUserCreated(basecache.joinedTimestamp)
-    const userisbot = basecache.bot ? 'yes' : 'no'
-    const userboost = basecache.premiumSince == null ? 'none' : getUserCreated(basecache.premiumSince)
-    const useractivity = basecache.presence?.activities[0]?.name == undefined ? 'none' : basecache.presence?.activities[0]?.name
+    const useravatar = basecache.displayAvatarURL({ format: 'png' });
+    const username = basecache.user.username;
+    const usernickname = basecache.displayName;
+    const userdisplayname = basecache.globalName;
+    const usercreated = getUserCreated(basecache.user.createdTimestamp);
+    const userguildjoin = getUserCreated(basecache.joinedTimestamp);
+    const userisbot = basecache.bot ? 'yes' : 'no';
+    const userboost = basecache.premiumSince == null ? 'none' : getUserCreated(basecache.premiumSince);
+    const useractivity = basecache.presence?.activities[0]?.name == undefined ? 'none' : basecache.presence?.activities[0]?.name;
 
     const userboostembed =
       userboost == 'none' ? `**Boost Since**: none \n` :
-        `**Boost Since**: ${userboost[0]} \n` + `**-> **||${userboost[1]}||` + '\n'
+        `**Boost Since**: ${userboost[0]} \n` + `**-> **||${userboost[1]}||` + '\n';
 
     const getUserInfo = await userdb.get(`${userID}`);
 
@@ -93,13 +95,13 @@ module.exports = {
       '**Bot**: ' + userisbot + '\n' +
       '**userID**: `' + basecache.user.id + '`' + '\n' +
       userboostembed +
-      '**Activity**: `' + useractivity + '`'
+      '**Activity**: `' + useractivity + '`';
 
     const embedjoined =
       `**Discord**: ${usercreated[0]}` + '\n' +
       `**-> **||${usercreated[1]}||` + '\n' +
       `**Guild**: ${userguildjoin[0]}` + '\n' +
-      `**-> **||${userguildjoin[1]}||` + '\n' //+
+      `**-> **||${userguildjoin[1]}||` + '\n';
 
     const embed = new EmbedBuilder()
       .setAuthor({ name: username, iconURL: useravatar, url: `https://discord.com/users/${userID}` })
