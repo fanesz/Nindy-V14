@@ -23,7 +23,7 @@ module.exports = {
       if (isNaN(userID)) {
         await commandType.channel.guild.members
           .fetch({ cache: false }).then(members => members
-            .find(member => member.user.username === userID)).then((result) => {
+            .find(member => member.displayName === userID)).then((result) => {
               basecache = result
               userID = basecache.user.id
             });
@@ -48,7 +48,7 @@ module.exports = {
     ctx.drawImage(templeteImage, 0, 0);
     ctx.fillStyle = '#ffffff';
     ctx.font = '82px RedHatDisplay';
-    let text = `${basecache.user.tag}`;
+    let text = `${basecache.displayName}`;
     ctx.textAlign = 'center';
     ctx.fillText(text, 745, 1260);
 
