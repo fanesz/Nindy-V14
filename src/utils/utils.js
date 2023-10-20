@@ -26,11 +26,11 @@ module.exports = {
           allowedMentions: { repliedUser: false }
         });
 
-    client.spamlog = (user, channel) =>
+    client.spamlog = (user, channel, msg = '') =>
       client.channels.cache.get(config.muted_LogChannelID)
         .send({
           content:
-            `\`[${moment().format("HH:mm:ss")}]\` :exclamation: <@${user}> detected spamming at <#${channel}>`,
+            `\`[${moment().format("HH:mm:ss")}]\` :exclamation: <@${user}> detected spamming at <#${channel}>${msg && `, spam msg: ${msg}`}`,
           allowedMentions: { repliedUser: false }
         });
 
