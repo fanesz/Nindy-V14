@@ -33,6 +33,9 @@ module.exports = {
             `\`[${moment().format("HH:mm:ss")}]\` :exclamation: <@${user}> detected spamming at <#${channel}>${msg && `, spam msg: ${msg}`}`,
           allowedMentions: { repliedUser: false }
         });
+    
+    client.errReply = (commandType, content) => 
+        commandType.reply(`:warning: ${content}`);
 
   },
   replyMessage: (commandType, content, embed, ephemeral, repliedUser) => {
