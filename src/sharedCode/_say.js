@@ -28,8 +28,8 @@ module.exports = {
       const content = args.join(' ');
       if (content.length === 0) return;
       if (content.includes('@everyone') || (content.includes('@here'))) {
-        await message.delete();
-      }
+        return await message.delete();
+      };
       if (message.content.startsWith('-sayr ')) {
         await message.channel.messages.fetch(message.reference.messageId).then(m => {
           m.reply({
@@ -42,11 +42,9 @@ module.exports = {
         await message.delete()
       } else {
         await message.delete();
-        await message.channel.send(content.join(' '))
+        await message.channel.send(content)
       }
     }
-
-
 
   }
 };

@@ -23,7 +23,7 @@ module.exports = {
     }
 
     if (interaction.type === InteractionType.MessageComponent) {
-      console.log(interaction);
+      // console.log(interaction);
     }
   }
 };

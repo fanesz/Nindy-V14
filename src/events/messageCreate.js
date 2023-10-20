@@ -93,7 +93,7 @@ module.exports = {
       if (message.member.roles.cache.find(r => ignoreRole.indexOf(r.id) !== -1)) return;
       if (message.member.permissionsIn(message.channel.id).has(PermissionsBitField.Flags.Administrator)) return;
 
-      const spamDetected = async (user, channel) => {
+      const spamDetected = async (user, channel, msg = '') => {
         const guild = client.guilds.cache.get(config.guildID);
         const role = guild.roles.cache.get(config.mute_RoleID)
         const member = await guild.members.fetch(user)
@@ -103,7 +103,7 @@ module.exports = {
         }, 10000);
 
         message.channel.send(`<@${user}>, muted 10s! no spam ngab <:nindy_ho:977817574500859944>`);
-        client.spamlog(user, channel);
+        client.spamlog(user, channel, msg);
       }
 
       // Image
@@ -162,7 +162,7 @@ module.exports = {
       // Normal Msg / GIF
       if (userset.has(message.author.id + message.content)) {
         if (spamset.has(message.author.id)) {
-          spamDetected(message.author.id, message.channelId);
+          spamDetected(message.author.id, message.channelId, message.content);
           spamset.delete(message.author.id);
           userset.delete(message.author.id + message.content);
         } else {
@@ -174,8 +174,6 @@ module.exports = {
           userset.delete(message.author.id + message.content);
         }, 5000)
       }
-
-
     }
 
 
