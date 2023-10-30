@@ -48,7 +48,7 @@ module.exports = {
     ctx.drawImage(templeteImage, 0, 0);
     ctx.fillStyle = '#ffffff';
     ctx.font = '82px RedHatDisplay';
-    let text = `${basecache.displayName}`;
+    let text = `${basecache.user.username}`;
     ctx.textAlign = 'center';
     ctx.fillText(text, 745, 1260);
 
