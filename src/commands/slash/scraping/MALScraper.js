@@ -1,6 +1,5 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
 const _MALScraper = require("../../../sharedCode/_MALScraper");
-const { ActionRowBuilder } = require("discord.js");
 
 module.exports = {
   data: [new SlashCommandBuilder()

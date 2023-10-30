@@ -1,4 +1,3 @@
-const config = require("../config");
 const Canvas = require('canvas')
 const { registerFont } = require('canvas')
 registerFont('./font/RedHatDisplay-Bold.ttf', { family: 'RedHatDisplay' })

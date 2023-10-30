@@ -2,10 +2,9 @@ const { default: axios } = require("axios");
 const cheerio = require("cheerio");
 const { replyMessage } = require("../utils/utils");
 const translate = require('@iamtraction/google-translate');
-const { EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 const config = require("../config");
 const { pagination, ButtonTypes, ButtonStyles } = require('@devraelfreeze/discordjs-pagination');
-const wait = require('node:timers/promises').setTimeout;
 
 module.exports = {
   name: "anime",

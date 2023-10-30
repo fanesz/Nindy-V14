@@ -35,12 +35,7 @@ module.exports = {
 
         client.userupdatelog(oldMember.id, displayName_before, displayName_after, "global display name")
       }
-
-
     }
-
-
-
 
 
 
