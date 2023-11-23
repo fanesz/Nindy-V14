@@ -9,7 +9,7 @@ const usersetsticker = new Set();
 const spamsetsticker = new Set();
 const userset = new Set();
 const spamset = new Set();
-
+const userautomod = new Set();
 
 module.exports = {
   name: Events.MessageCreate,
@@ -21,10 +21,10 @@ module.exports = {
     const client = message.client;
     const prefix = config.prefix;
 
-
     registerCommands();
     autoDeleteAmariBotMessage();
     antiSpam();
+    automodWarn();
 
     function registerCommands() {
       if (!message.content.startsWith(prefix)) return;
@@ -97,6 +97,21 @@ module.exports = {
         const guild = client.guilds.cache.get(config.guildID);
         const role = guild.roles.cache.get(config.mute_RoleID)
         const member = await guild.members.fetch(user)
+
+        if (userautomod.has(user)) {
+          await member.send("We kick you from NTC Department because we detected you spamming a forbidden message. If this is a mistakes, please rejoin (discord.gg/neoteric) or dm <@278169600728760320>!")
+          await member.kick("Spamming a forbidden message")
+          userautomod.delete(user);
+          client.kickLog(user, `detected spamming a forbidden word and i kick him (●'◡'●) tehe//`);
+          message.channel.send(`<@${user}>, kicked! ~(=^‥^)ノ`);
+          return;
+        } else {
+          userautomod.add(user);
+          setTimeout(() => {
+            userautomod.delete(user);
+          }, 30000)
+        };
+
         await member.roles.add(role);
         setTimeout(async () => {
           await member.roles.remove(role);
@@ -169,14 +184,30 @@ module.exports = {
           spamset.add(message.author.id);
         }
       } else {
-        userset.add(message.author.id + message.content);
-        setTimeout(() => {
-          userset.delete(message.author.id + message.content);
-        }, 5000)
+        const whitelistedMessage = [
+          'm!skip',
+          'm!s'
+        ]
+        if (whitelistedMessage.indexOf(message.content.toLowerCase()) === -1) {
+          userset.add(message.author.id + message.content);
+          setTimeout(() => {
+            userset.delete(message.author.id + message.content);
+          }, 5000)
+        }
       }
     }
 
+    async function automodWarn() {
+      if (message.channelId !== '1177127843537375242') return;
+      const guild = client.guilds.cache.get(config.guildID);
+      const member = await guild.members.fetch(message.author.id)
 
+      const rule = message.embeds[0].data.fields[0].value;
+      const matchMessage = message.embeds[0].data.description;
+
+      await member.send(`Our AutoMod detected you send a message that contains a forbidden word: \`${matchMessage}\`, with a rule: \`${rule}\`. If you keep doing this, you will be kicked from NTC Department.\n If you want to share a discord link, please separated it or contact admin (❁´◡\`❁), Thank you!`)
+
+    }
 
   }
 };

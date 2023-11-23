@@ -33,9 +33,17 @@ module.exports = {
             `\`[${moment().format("HH:mm:ss")}]\` :exclamation: <@${user}> detected spamming at <#${channel}>${msg && `, spam msg: ${msg}`}`,
           allowedMentions: { repliedUser: false }
         });
-    
-    client.errReply = (commandType, content) => 
-        commandType.reply(`:warning: ${content}`);
+
+    client.errReply = (commandType, content) =>
+      commandType.reply(`:warning: ${content}`);
+
+    client.kickLog = (user, reason) =>
+      client.channels.cache.get(config.moderation_LogChannelID)
+        .send({
+          content:
+            `\`[${moment().format("HH:mm:ss")}]\` :hammer: auto-kick <@${user}>, ${reason}`,
+          allowedMentions: { repliedUser: false }
+        });
 
   },
   replyMessage: (commandType, content, embed, ephemeral, repliedUser) => {
