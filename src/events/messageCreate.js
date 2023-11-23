@@ -198,7 +198,7 @@ module.exports = {
     }
 
     async function automodWarn() {
-      if (message.channelId !== '1177127843537375242') return;
+      if (message.channelId !== config.automod_LogChannelID) return;
       const guild = client.guilds.cache.get(config.guildID);
       const member = await guild.members.fetch(message.author.id)
 
