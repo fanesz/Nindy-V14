@@ -20,6 +20,6 @@ module.exports = {
         )
     ),
   run: async (client, interaction) => {
-    _serverBoost.run(client, null, null, interaction)
+    _serverBoost.run(client, null, null, interaction, null)
   }
 };

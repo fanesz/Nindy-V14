@@ -5,7 +5,7 @@ module.exports = {
   aliases: ["boost", "nitro"],
   cooldown: 5000,
   run: async (client, message, args) => {
-    _serverBoost.run(client, message, args, null);
+    _serverBoost.run(client, message, args, null, null);
   }
 };
 

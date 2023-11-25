@@ -1,6 +1,7 @@
 const { ChannelType, Collection, Events, PermissionsBitField } = require("discord.js")
 const config = require("../config.js")
-const ms = require("ms")
+const ms = require("ms");
+const _serverBoost = require("../sharedCode/_serverBoost.js");
 const cooldown = new Collection();
 
 const usersetimg = new Set();
@@ -10,6 +11,7 @@ const spamsetsticker = new Set();
 const userset = new Set();
 const spamset = new Set();
 const userautomod = new Set();
+const serverboost = new Set();
 
 module.exports = {
   name: Events.MessageCreate,
@@ -25,6 +27,7 @@ module.exports = {
     autoDeleteAmariBotMessage();
     antiSpam();
     automodWarn();
+    autoDetectBooster();
 
     function registerCommands() {
       if (!message.content.startsWith(prefix)) return;
@@ -201,12 +204,20 @@ module.exports = {
       if (message.channelId !== config.automod_LogChannelID) return;
       const guild = client.guilds.cache.get(config.guildID);
       const member = await guild.members.fetch(message.author.id)
-
       const rule = message.embeds[0].data.fields[0].value;
       const matchMessage = message.embeds[0].data.description;
-
       await member.send(`Our AutoMod detected you send a message that contains a forbidden word: \`${matchMessage}\`, with a rule: \`${rule}\`. If you keep doing this, you will be kicked from NTC Department.\n If you want to share a discord link, please separated it or contact admin (❁´◡\`❁), Thank you!`)
+    }
 
+    async function autoDetectBooster() {
+      if (message.channelId !== config.booster_LogChannelID) return;
+      if (message.type !== 8) return;
+      if (serverboost.has(message.author.id)) return;
+      await _serverBoost.run(client, message, [message.author.id], null, '802869213290692658');
+      serverboost.add(message.author.id)
+      setTimeout(() => {
+        serverboost.delete(message.author.id)
+      }, 60000);
     }
 
   }

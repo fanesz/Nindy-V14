@@ -1,11 +1,12 @@
 const Canvas = require('canvas')
 const { registerFont } = require('canvas')
 registerFont('./font/RedHatDisplay-Bold.ttf', { family: 'RedHatDisplay' })
-const path = require('path')
+const path = require('path');
+const config = require('../config');
 
 module.exports = {
   name: "boost",
-  run: async (client, message, args, interaction) => {
+  run: async (client, message, args, interaction, sendTarget) => {
     let userID;
     let ephemeral = false;
     if (interaction !== null) { // slash
@@ -53,13 +54,34 @@ module.exports = {
 
     let canvasnew = basecache.displayAvatarURL({ extension: 'png', size: 1024 });
 
-    commandType.reply({
-      files: [{
-        attachment: canvas.toBuffer('image/png'), canvasnew,
-        name: basecache.displayAvatarURL({ extension: 'png' })
-      }],
-      ephemeral: ephemeral
-    });
+    if (sendTarget) {
+      const user = `<@${message.author.id}>`;
+      await client.channels.cache.get(sendTarget).send({
+        content: [
+          `Nindy detect a boost from <#${config.booster_LogChannelID}>, so Nindy generate it automatically (❁´◡\`❁)\n`,
+          'Here some thank you templete that you can use!\n',
+          `\`\`\`Thanks to ${user} atas boostnya!, semoga sehat selalu <:nindy_yes:977817511821213757> <:nindy_menggokil:977817690121076746>\`\`\``,
+          `\`\`\`Thanks bang ${user} untuk boostnya\`\`\``,
+          `\`\`\`thx ${user} atas boostnya\`\`\``,
+          `\`\`\`Terima kasih buat ${user} atas boostnya!\`\`\``,
+          `\`\`\`thengs ${user} atas boostnya\`\`\``
+        ].join(''),
+        files: [{
+          attachment: canvas.toBuffer('image/png'), canvasnew,
+          name: basecache.displayAvatarURL({ extension: 'png' })
+        }],
+        allowedMentions: { repliedUser: false }
+      })
+    } else {
+      commandType.reply({
+        files: [{
+          attachment: canvas.toBuffer('image/png'), canvasnew,
+          name: basecache.displayAvatarURL({ extension: 'png' })
+        }],
+        ephemeral: ephemeral
+      });
+    }
+
 
   }
 };
