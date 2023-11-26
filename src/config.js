@@ -10,6 +10,7 @@ module.exports = {
   moderation_LogChannelID: process.env.DEPLOY_CONTEXT == "dev" ? "1152089543219101769" : "802877437477912576",
   automod_LogChannelID: process.env.DEPLOY_CONTEXT == "dev" ? "1177127843537375242" : "988016439413846066",
   booster_LogChannelID: process.env.DEPLOY_CONTEXT == "dev" ? "1177127843537375242" : "942414209453555793",
+  autoBooster_LogChannelID: process.env.DEPLOY_CONTEXT == "dev" ? "1177127843537375242" : "981498267948941342",
   
   mute_RoleID: process.env.DEPLOY_CONTEXT == "dev" ? "1043736567749017620" : "802905885327491114",
   nsfw_RoleID: process.env.DEPLOY_CONTEXT == "dev" ? "1043736549814194196" : "802892741355896842",

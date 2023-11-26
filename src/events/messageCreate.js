@@ -213,7 +213,7 @@ module.exports = {
       if (message.channelId !== config.booster_LogChannelID) return;
       if (message.type !== 8) return;
       if (serverboost.has(message.author.id)) return;
-      await _serverBoost.run(client, message, [message.author.id], null, '802869213290692658');
+      await _serverBoost.run(client, message, [message.author.id], null, config.autoBooster_LogChannelID);
       serverboost.add(message.author.id)
       setTimeout(() => {
         serverboost.delete(message.author.id)
