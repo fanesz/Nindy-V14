@@ -58,7 +58,7 @@ module.exports = {
       const user = `<@${message.author.id}>`;
       await client.channels.cache.get(sendTarget).send({
         content: [
-          `Nindy detect a boost from <#${config.booster_LogChannelID}>, so Nindy generate it automatically (❁´◡\`❁)\n`,
+          `Nindy detect a boost from <#${config.honorable_LogChannelID}>, so Nindy generate it automatically (❁´◡\`❁)\n`,
           'Here some thank you templete that you can use!\n',
           `\`\`\`Thanks to ${user} atas boostnya!, semoga sehat selalu <:nindy_yes:977817511821213757> <:nindy_menggokil:977817690121076746>\`\`\``,
           `\`\`\`Thanks bang ${user} untuk boostnya\`\`\``,

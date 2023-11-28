@@ -212,7 +212,7 @@ module.exports = {
     }
 
     async function autoDetectBooster() {
-      if (message.channelId !== config.booster_LogChannelID) return;
+      if (message.channelId !== config.honorable_LogChannelID) return;
       if (![8, 9, 10, 11].includes(message.type)) return;
       if (serverboost.has(message.author.id)) return;
       await _serverBoost.run(client, message, [message.author.id], null, config.staffCommand_LogChannelID);

@@ -354,16 +354,8 @@ module.exports = {
     let canvasnew = "../../img/donaturv2.1.png";
     
     if (donateEmbed) {
-      await client.channels.cache.get(config.staffCommand_LogChannelID).send({
-        content: [
-          `Nindy detect a donation from <#${config.booster_LogChannelID}>, so Nindy generate it automatically (❁´◡\`❁)\n`,
-          'Here some thank you templete that you can use!\n',
-          `\`\`\`Thanks to ${ordernama} atas donasinya!, semoga sehat selalu <:nindy_menggokil:977817690121076746>\`\`\``,
-          `\`\`\`Thanks bang ${ordernama} untuk donasinya\`\`\``,
-          `\`\`\`thx ${ordernama} atas donasinya\`\`\``,
-          `\`\`\`Terima kasih buat ${ordernama} atas donasinya!\`\`\``,
-          `\`\`\`thengs ${ordernama} atas donasinya\`\`\``
-        ].join(''),
+      await client.channels.cache.get(config.honorable_LogChannelID).send({
+        content: `Thankyou ${ordernama} atas boostnya (❁´◡\`❁)\n`,
         files: [{
           attachment: canvas.toBuffer('image/png'), canvasnew,
           name: `${ordernama}.png`

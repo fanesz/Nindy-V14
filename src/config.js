@@ -9,7 +9,7 @@ module.exports = {
   muted_LogChannelID: process.env.DEPLOY_CONTEXT == "dev" ? "1152089543219101769" : "1152642684486430901",
   moderation_LogChannelID: process.env.DEPLOY_CONTEXT == "dev" ? "1152089543219101769" : "802877437477912576",
   automod_LogChannelID: process.env.DEPLOY_CONTEXT == "dev" ? "1177127843537375242" : "988016439413846066",
-  booster_LogChannelID: process.env.DEPLOY_CONTEXT == "dev" ? "1177127843537375242" : "942414209453555793",
+  honorable_LogChannelID: process.env.DEPLOY_CONTEXT == "dev" ? "1177127843537375242" : "942414209453555793",
   staffCommand_LogChannelID: process.env.DEPLOY_CONTEXT == "dev" ? "1177127843537375242" : "981498267948941342",
   donatur_LogChannelID: process.env.DEPLOY_CONTEXT == "dev" ? "962197157174181909" : "962197157174181909",
   
