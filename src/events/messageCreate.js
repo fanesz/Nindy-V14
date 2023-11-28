@@ -2,6 +2,7 @@ const { ChannelType, Collection, Events, PermissionsBitField } = require("discor
 const config = require("../config.js")
 const ms = require("ms");
 const _serverBoost = require("../sharedCode/_serverBoost.js");
+const _donate = require("../sharedCode/_donate.js");
 const cooldown = new Collection();
 
 const usersetimg = new Set();
@@ -28,6 +29,7 @@ module.exports = {
     antiSpam();
     automodWarn();
     autoDetectBooster();
+    autoDetectDonatur();
 
     function registerCommands() {
       if (!message.content.startsWith(prefix)) return;
@@ -211,13 +213,19 @@ module.exports = {
 
     async function autoDetectBooster() {
       if (message.channelId !== config.booster_LogChannelID) return;
-      if (message.type !== 8) return;
+      if (![8, 9, 10, 11].includes(message.type)) return;
       if (serverboost.has(message.author.id)) return;
-      await _serverBoost.run(client, message, [message.author.id], null, config.autoBooster_LogChannelID);
+      await _serverBoost.run(client, message, [message.author.id], null, config.staffCommand_LogChannelID);
       serverboost.add(message.author.id)
       setTimeout(() => {
         serverboost.delete(message.author.id)
       }, 60000);
+    }
+
+    async function autoDetectDonatur() {
+      if (message.channelId !== config.donatur_LogChannelID) return;
+      if (message.embeds.length === 0) return;
+      await _donate.run(client, message, [message.author.id], null, message);
     }
 
   }
