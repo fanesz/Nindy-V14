@@ -362,6 +362,7 @@ module.exports = {
         }],
         allowedMentions: { repliedUser: false }
       });
+      donateEmbed.reply(`Automatically sent to <#${config.honorable_LogChannelID}> ~(=^.^)ノ`);
     } else {
       commandType.reply({
         files: [{
