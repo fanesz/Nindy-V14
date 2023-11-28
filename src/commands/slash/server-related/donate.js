@@ -6,7 +6,7 @@ module.exports = {
     .setName("donate")
     .setDescription("Generate donatur thank you receipt secara manual")
     .addStringOption(option =>
-      option.setName("embedID")
+      option.setName("embedid")
         .setDescription("Message ID dari embed donatur")
         .setRequired(true)
     ),

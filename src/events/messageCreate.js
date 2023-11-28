@@ -225,7 +225,7 @@ module.exports = {
     async function autoDetectDonatur() {
       if (message.channelId !== config.donatur_LogChannelID) return;
       if (message.embeds.length === 0) return;
-      await _donate.run(client, message, [message.author.id], null, message);
+      await _donate.run(client, message, null, null, message);
     }
 
   }

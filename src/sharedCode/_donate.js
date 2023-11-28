@@ -11,7 +11,7 @@ module.exports = {
     if (!donateEmbed) {
       let embedID;
       if (interaction) { // slash
-        embedID = interaction.options.getString("embedID");
+        embedID = interaction.options.getString("embedid");
         client.cmdlog(interaction.user.username, interaction.commandName, [embedID]);
       } else { // prefix
         embedID = args[0];
