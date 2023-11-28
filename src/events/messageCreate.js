@@ -1,4 +1,5 @@
-const { ChannelType, Collection, Events, PermissionsBitField } = require("discord.js")
+const { ChannelType, Collection, Events, PermissionsBitField, EmbedBuilder, WebhookClient } = require("discord.js")
+require("dotenv").config();
 const config = require("../config.js")
 const ms = require("ms");
 const _serverBoost = require("../sharedCode/_serverBoost.js");
@@ -18,7 +19,7 @@ module.exports = {
   name: Events.MessageCreate,
   once: false,
   execute: async (message) => {
-    if (message.author.bot) return;
+    if (message.author.bot && !message.webhookId) return;
     if (message.channel.type === ChannelType.DM) return;
 
     const client = message.client;
@@ -30,6 +31,10 @@ module.exports = {
     automodWarn();
     autoDetectBooster();
     autoDetectDonatur();
+
+    if (process.env.DEPLOY_CONTEXT == "dev") {
+      trakteerWebhookTest();
+    }
 
     function registerCommands() {
       if (!message.content.startsWith(prefix)) return;
@@ -226,6 +231,21 @@ module.exports = {
       if (message.channelId !== config.donatur_LogChannelID) return;
       if (message.embeds.length === 0) return;
       await _donate.run(client, message, null, null, message);
+    }
+
+    async function trakteerWebhookTest() {
+      if (message.author.id !== '278169600728760320') return;
+      if (message.content !== config.prefix + 'test trakteer') return;
+      const webhookClient = new WebhookClient({ url: process.env.TEST_WEBHOOK_DONATUR });
+      const embed = new EmbedBuilder()
+        .setAuthor({ name: 'vanezzz', iconURL: 'https://i.imgur.com/AfFp7pu.png' })
+        .setTitle('Trakteer 1 File Report')
+        .setDescription('trakteer.id/neoteric');
+
+      webhookClient.send({
+        username: 'Trakteer-Test',
+        embeds: [embed],
+      });
     }
 
   }
