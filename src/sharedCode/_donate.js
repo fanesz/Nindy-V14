@@ -355,7 +355,7 @@ module.exports = {
     
     if (donateEmbed) {
       await client.channels.cache.get(config.honorable_LogChannelID).send({
-        content: `Thankyou ${ordernama} atas boostnya (❁´◡\`❁)\n`,
+        content: `Thankyou ${ordernama} atas donasinya (❁´◡\`❁)\n`,
         files: [{
           attachment: canvas.toBuffer('image/png'), canvasnew,
           name: `${ordernama}.png`
