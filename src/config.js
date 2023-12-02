@@ -15,6 +15,7 @@ module.exports = {
   
   mute_RoleID: process.env.DEPLOY_CONTEXT == "dev" ? "1043736567749017620" : "802905885327491114",
   nsfw_RoleID: process.env.DEPLOY_CONTEXT == "dev" ? "1043736549814194196" : "802892741355896842",
+  folks_RoleID: process.env.DEPLOY_CONTEXT == "dev" ? "1180557782802497546" : "940237965689503774",
 
   embedColor: "#fd46bc",
 

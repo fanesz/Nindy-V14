@@ -31,6 +31,7 @@ module.exports = {
     automodWarn();
     autoDetectBooster();
     autoDetectDonatur();
+    folksRole();
 
     if (process.env.DEPLOY_CONTEXT == "dev") {
       trakteerWebhookTest();
@@ -256,6 +257,22 @@ module.exports = {
         username: 'Trakteer-Test',
         embeds: [embed],
       });
+    }
+
+    async function folksRole() {
+      if (message.author.bot) return;
+      const userRoleCache = message.member.roles.cache;
+      const bypassRoles = [
+        config.folks_RoleID, // Folks
+        '940529460820705280', // Low-Level Agent
+        '940530272036855838', // High-Level Agent
+        '940530271986528256', // Specialist Agent
+        '940530271906832404', // Certified Agent
+      ]
+      if (!userRoleCache.find(r => bypassRoles.includes(r.id))) {
+        console.log("add folks role");
+        await message.member.roles.add(config.folks_RoleID);
+      }
     }
 
   }
