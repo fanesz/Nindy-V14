@@ -4,6 +4,7 @@ const config = require("../config.js")
 const ms = require("ms");
 const _serverBoost = require("../sharedCode/server-related/_serverBoost.js");
 const _donate = require("../sharedCode/server-related/_donate.js");
+const { getDateDiff, replyMessage } = require("../utils/utils.js");
 const cooldown = new Collection();
 
 const usersetimg = new Set();
@@ -24,6 +25,7 @@ module.exports = {
 
     const client = message.client;
     const prefix = config.prefix;
+    const userID = message.author.id;
 
     registerCommands();
     autoDeleteAmariBotMessage();
@@ -32,6 +34,7 @@ module.exports = {
     autoDetectBooster();
     autoDetectDonatur();
     folksRole();
+    yearOfServiceRole();
 
     if (process.env.DEPLOY_CONTEXT == "dev") {
       trakteerWebhookTest();
@@ -46,21 +49,21 @@ module.exports = {
       if (!command) command = client.commands.get(client.commandaliases.get(cmd));
       if (command) {
         if (command.cooldown) {
-          if (cooldown.has(`${command.name}${message.author.id}`)) {
+          if (cooldown.has(`${command.name}${userID}`)) {
             message.reply({
-              content: `Command on Cooldown \`${ms(cooldown.get(`${command.name}${message.author.id}`) - Date.now(), { long: true }).replace("minutes", `menit`).replace("seconds", `detik`).replace("second", `detik`).replace("ms", `ms`)}\` coba lagi nanti OwO`,
+              content: `Command on Cooldown \`${ms(cooldown.get(`${command.name}${userID}`) - Date.now(), { long: true }).replace("minutes", `menit`).replace("seconds", `detik`).replace("second", `detik`).replace("ms", `ms`)}\` coba lagi nanti OwO`,
               allowedMentions: { repliedUser: false }
             }).then(msg => {
               setTimeout(() => {
                 msg.delete();
-              }, cooldown.get(`${command.name}${message.author.id}`) - Date.now())
+              }, cooldown.get(`${command.name}${userID}`) - Date.now())
             })
             return
           }
           command.run(client, message, args)
-          cooldown.set(`${command.name}${message.author.id}`, Date.now() + command.cooldown)
+          cooldown.set(`${command.name}${userID}`, Date.now() + command.cooldown)
           setTimeout(() => {
-            cooldown.delete(`${command.name}${message.author.id}`)
+            cooldown.delete(`${command.name}${userID}`)
           }, command.cooldown);
         } else {
           command.run(client, message, args)
@@ -69,7 +72,7 @@ module.exports = {
     }
 
     function autoDeleteAmariBotMessage() {
-      if (message.guildId !== config.guildID || message.author.id != '339254240012664832') return;
+      if (message.guildId !== config.guildID || userID != '339254240012664832') return;
       const ignoreChannel = [
         '802865004239126541',  // #admin-chat
         '802877962575806484',  // #admin-commands
@@ -155,23 +158,23 @@ module.exports = {
           });
 
           if (!(new Set(imgSize).size !== 1 || new Set(imgWidth).size !== 1 || new Set(imgHeight).size !== 1)) {
-            spamDetected(message.author.id, message.channelId);
+            spamDetected(userID, message.channelId);
           }
           // di send spam minimal 3x
         } else if (message.attachments.size == 1) {
           let imgSize = (Object.values(Object.fromEntries(message.attachments))[0]).size;
-          if (usersetimg.has(message.author.id + imgSize)) {
-            if (spamsetimg.has(message.author.id)) {
-              spamDetected(message.author.id, message.channelId);
-              spamsetimg.delete(message.author.id);
-              usersetimg.delete(message.author.id + imgSize);
+          if (usersetimg.has(userID + imgSize)) {
+            if (spamsetimg.has(userID)) {
+              spamDetected(userID, message.channelId);
+              spamsetimg.delete(userID);
+              usersetimg.delete(userID + imgSize);
             } else {
-              spamsetimg.add(message.author.id);
+              spamsetimg.add(userID);
             }
           } else {
-            usersetimg.add(message.author.id + imgSize);
+            usersetimg.add(userID + imgSize);
             setTimeout(() => {
-              usersetimg.delete(message.author.id + imgSize);
+              usersetimg.delete(userID + imgSize);
             }, 4000)
           }
         }
@@ -180,29 +183,29 @@ module.exports = {
       // Sticker
       if (message.stickers.size !== 0) {
         let stickerID = Object.values(Object.fromEntries(message.stickers))[0].id;
-        if (usersetsticker.has(message.author.id + stickerID)) {
-          if (spamsetsticker.has(message.author.id)) {
-            spamDetected(message.author.id, message.channelId);
+        if (usersetsticker.has(userID + stickerID)) {
+          if (spamsetsticker.has(userID)) {
+            spamDetected(userID, message.channelId);
           } else {
-            spamsetsticker.add(message.author.id);
+            spamsetsticker.add(userID);
           }
         } else {
-          usersetsticker.add(message.author.id + message.content);
+          usersetsticker.add(userID + message.content);
           setTimeout(() => {
-            usersetsticker.delete(message.author.id + message.content);
-            spamsetsticker.delete(message.author.id);
+            usersetsticker.delete(userID + message.content);
+            spamsetsticker.delete(userID);
           }, 10000)
         }
       }
 
       // Normal Msg / GIF
-      if (userset.has(message.author.id + message.content)) {
-        if (spamset.has(message.author.id)) {
-          spamDetected(message.author.id, message.channelId, message.content);
-          spamset.delete(message.author.id);
-          userset.delete(message.author.id + message.content);
+      if (userset.has(userID + message.content)) {
+        if (spamset.has(userID)) {
+          spamDetected(userID, message.channelId, message.content);
+          spamset.delete(userID);
+          userset.delete(userID + message.content);
         } else {
-          spamset.add(message.author.id);
+          spamset.add(userID);
         }
       } else {
         const whitelistedMessage = [
@@ -210,9 +213,9 @@ module.exports = {
           'm!s'
         ]
         if (whitelistedMessage.indexOf(message.content.toLowerCase()) === -1) {
-          userset.add(message.author.id + message.content);
+          userset.add(userID + message.content);
           setTimeout(() => {
-            userset.delete(message.author.id + message.content);
+            userset.delete(userID + message.content);
           }, 5000)
         }
       }
@@ -221,7 +224,7 @@ module.exports = {
     async function automodWarn() {
       if (message.channelId !== config.automod_LogChannelID) return;
       const guild = client.guilds.cache.get(config.guildID);
-      const member = await guild.members.fetch(message.author.id)
+      const member = await guild.members.fetch(userID)
       const rule = message.embeds[0].data.fields[0].value;
       const matchMessage = message.embeds[0].data.description;
       await member.send(`Our AutoMod detected you send a message that contains a forbidden word: \`${matchMessage}\`, with a rule: \`${rule}\`. If you keep doing this, you will be kicked from NTC Department.\n If you want to share a discord link, please separated it or contact admin (❁´◡\`❁), Thank you!`)
@@ -230,11 +233,11 @@ module.exports = {
     async function autoDetectBooster() {
       if (message.channelId !== config.honorable_LogChannelID) return;
       if (![8, 9, 10, 11].includes(message.type)) return;
-      if (serverboost.has(message.author.id)) return;
-      await _serverBoost.run(client, message, [message.author.id], null, config.staffCommand_LogChannelID);
-      serverboost.add(message.author.id)
+      if (serverboost.has(userID)) return;
+      await _serverBoost.run(client, message, [userID], null, config.staffCommand_LogChannelID);
+      serverboost.add(userID)
       setTimeout(() => {
-        serverboost.delete(message.author.id)
+        serverboost.delete(userID)
       }, 60000);
     }
 
@@ -245,7 +248,7 @@ module.exports = {
     }
 
     async function trakteerWebhookTest() {
-      if (message.author.id !== '278169600728760320') return;
+      if (userID !== '278169600728760320') return;
       if (message.content !== config.prefix + 'test trakteer') return;
       const webhookClient = new WebhookClient({ url: process.env.TEST_WEBHOOK_DONATUR });
       const embed = new EmbedBuilder()
@@ -270,8 +273,46 @@ module.exports = {
         '940530271906832404', // Certified Agent
       ]
       if (!userRoleCache.find(r => bypassRoles.includes(r.id))) {
-        console.log("add folks role");
         await message.member.roles.add(config.folks_RoleID);
+      }
+    }
+
+    async function yearOfServiceRole() {
+      if (message.author.bot) return;
+      const userYear = getDateDiff(await message.guild.members.cache.get(userID)?.joinedAt);
+      const blacklistedChannel = [
+        '802919702422355969', // #Introduction
+        '802868478683906079', // #game-updates
+      ]
+      if (blacklistedChannel.includes(message.channelId) || userYear[0] === 0) return;
+      const userRoleCache = message.member.roles.cache;
+
+      const replyMsg1Year = [
+        `**Thank you for your 1 Year Service** <@${userID}> 🎉 <:nindy_yes:977817511821213757>\n_(Received 1 Year Operation Badge, Check out your profile!)_`,
+        `**Your hard work and perseverance have paid off. Congratulations** <@${userID}> 🧤\n_(Received 1 Year Operation Badge, Check out your profile!)_`,
+        `**You did it <@${userID}>! We knew you could!, take this 1 Year Operation Badge as a Token of Appreciation** :identification_card:\n_(Received 1 Year Operation Badge, Check out your profile!)_`,
+      ]
+      const replyMsg2Year = [
+        `**Thank you sir for your wonderfull 2 Year of Service** <@${userID}> 🎉 <:nindy_yes:977817511821213757>\n_(Received 2 Year Operation Badge, Check out your profile!)_`,
+        `**Nindy know your hard work in this 2 year of Service. Congratulations** <@${userID}> 🧤\n_(Received 2 Year Operation Badge, Check out your profile!)_`,
+        `**Well done <@${userID}>! We knew you could!, take this 2 Year Operation Badge as a Token of Appreciation** :identification_card:\n_(Received 2 Year Operation Badge, Check out your profile!)_`,
+      ]
+      // const replyMsg3Year = [
+      //   `**Thank you sir for your amazing 3 Year of Service** <@${userID}> 🎉 <:nindy_yes:977817511821213757>\n_(Received 2 Year Operation Badge, Check out your profile!)_`,
+      // ]
+
+      if (userYear[0] === 1) {
+        if (await userRoleCache.find(r => r.id === config.oneYearServiceRole)) return;
+        await message.member.roles.add(config.oneYearServiceRole)
+        // const randomMessage = replyMsg1Year[Math.floor(Math.random() * replyMsg1Year.length)];
+        // replyMessage(message, randomMessage, null, false, false);
+        
+      } else if (userYear[0] === 2) {
+        if (await userRoleCache.find(r => r.id === config.twoYearServiceRole)) return;
+        await message.member.roles.remove(config.oneYearServiceRole)
+        await message.member.roles.add(config.twoYearServiceRole)
+        // const randomMessage = replyMsg2Year[Math.floor(Math.random() * replyMsg2Year.length)];
+        // replyMessage(message, randomMessage, null, false, false);
       }
     }
 

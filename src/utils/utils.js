@@ -56,6 +56,23 @@ module.exports = {
       replyOptions.embeds = [embed];
     }
     commandType.reply(replyOptions);
+  },
+  getDateDiff(timestamp) {
+    if (timestamp == undefined) return;
+    let date1 = timestamp;
+    let date2 = new Date();
+    let years = date2.getFullYear() - date1.getFullYear();
+    let months = date2.getMonth() - date1.getMonth();
+    let days = date2.getDate() - date1.getDate();
+    if (days < 0) {
+      months--;
+      days += new Date(date2.getFullYear(), date2.getMonth(), 0).getDate();
+    }
+    if (months < 0) {
+      years--;
+      months += 12;
+    }
+    return [years, months, days];
   }
 
 };
