@@ -1,4 +1,4 @@
-const _serverBoost = require("../../../sharedCode/_serverBoost");
+const _serverBoost = require("../../../sharedCode/server-related/_serverBoost");
 
 module.exports = {
   name: "boost",

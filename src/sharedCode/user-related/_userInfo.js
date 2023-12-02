@@ -1,5 +1,5 @@
 const { EmbedBuilder } = require("discord.js");
-const { replyMessage } = require("../utils/utils");
+const { replyMessage } = require("../../utils/utils");
 
 module.exports = {
   name: "userInfo",

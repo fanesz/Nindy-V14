@@ -2,7 +2,7 @@ const Canvas = require('canvas');
 const { registerFont } = require('canvas')
 registerFont('./font/fake_receipt.ttf', { family: 'fake_receipt' })
 const path = require('path');
-const config = require("../config");
+const config = require("../../config");
 
 module.exports = {
   name: "donate",

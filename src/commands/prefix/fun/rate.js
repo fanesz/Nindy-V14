@@ -1,4 +1,4 @@
-const _rate = require("../../../sharedCode/_rate");
+const _rate = require("../../../sharedCode/fun/_rate");
 
 module.exports = {
   name: "rate",

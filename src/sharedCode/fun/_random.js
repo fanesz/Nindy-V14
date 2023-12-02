@@ -1,6 +1,6 @@
 const { EmbedBuilder } = require("discord.js");
-const config = require("../config");
-const { replyMessage } = require("../utils/utils");
+const config = require("../../config");
+const { replyMessage } = require("../../utils/utils");
 
 module.exports = {
   name: "random",

@@ -1,9 +1,9 @@
 const { default: axios } = require("axios");
 const cheerio = require("cheerio");
-const { replyMessage } = require("../utils/utils");
+const { replyMessage } = require("../../utils/utils");
 const translate = require('@iamtraction/google-translate');
 const { EmbedBuilder } = require("discord.js");
-const config = require("../config");
+const config = require("../../config");
 const { pagination, ButtonTypes, ButtonStyles } = require('@devraelfreeze/discordjs-pagination');
 
 module.exports = {

@@ -1,4 +1,4 @@
-const _donate = require("../../../sharedCode/_donate");
+const _donate = require("../../../sharedCode/server-related/_donate");
 
 module.exports = {
   name: "donate",

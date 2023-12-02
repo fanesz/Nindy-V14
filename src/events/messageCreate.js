@@ -2,8 +2,8 @@ const { ChannelType, Collection, Events, PermissionsBitField, EmbedBuilder, Webh
 require("dotenv").config();
 const config = require("../config.js")
 const ms = require("ms");
-const _serverBoost = require("../sharedCode/_serverBoost.js");
-const _donate = require("../sharedCode/_donate.js");
+const _serverBoost = require("../sharedCode/server-related/_serverBoost.js");
+const _donate = require("../sharedCode/server-related/_donate.js");
 const cooldown = new Collection();
 
 const usersetimg = new Set();

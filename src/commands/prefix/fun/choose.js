@@ -1,4 +1,4 @@
-const _choose = require("../../../sharedCode/_choose");
+const _choose = require("../../../sharedCode/fun/_choose");
 
 module.exports = {
   name: "choose",

@@ -1,4 +1,4 @@
-const _random = require("../../../sharedCode/_random");
+const _random = require("../../../sharedCode/fun/_random");
 
 module.exports = {
   name: "random",

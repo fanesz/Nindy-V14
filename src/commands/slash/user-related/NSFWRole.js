@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
-const _NSFWRole = require("../../../sharedCode/_NSFWRole");
+const _NSFWRole = require("../../../sharedCode/user-related/_NSFWRole");
 
 module.exports = {
   data: new SlashCommandBuilder()

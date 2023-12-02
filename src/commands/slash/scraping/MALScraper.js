@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
-const _MALScraper = require("../../../sharedCode/_MALScraper");
+const _MALScraper = require("../../../sharedCode/scraping/_MALScraper");
 
 module.exports = {
   data: [new SlashCommandBuilder()

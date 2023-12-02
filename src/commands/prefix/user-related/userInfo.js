@@ -1,4 +1,4 @@
-const _userInfo = require("../../../sharedCode/_userInfo");
+const _userInfo = require("../../../sharedCode/user-related/_userInfo");
 
 module.exports = {
   name: "user",

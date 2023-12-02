@@ -1,4 +1,4 @@
-const { replyMessage } = require("../utils/utils");
+const { replyMessage } = require("../../utils/utils");
 
 module.exports = {
   name: "choose",

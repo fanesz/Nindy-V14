@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require("@discordjs/builders");
-const _userInfo = require("../../../sharedCode/_userInfo");
+const _userInfo = require("../../../sharedCode/user-related/_userInfo");
 
 module.exports = {
   data: new SlashCommandBuilder()

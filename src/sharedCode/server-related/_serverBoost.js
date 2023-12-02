@@ -2,7 +2,7 @@ const Canvas = require('canvas')
 const { registerFont } = require('canvas')
 registerFont('./font/RedHatDisplay-Bold.ttf', { family: 'RedHatDisplay' })
 const path = require('path');
-const config = require('../config');
+const config = require('../../config');
 
 module.exports = {
   name: "boost",
