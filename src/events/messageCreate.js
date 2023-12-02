@@ -45,7 +45,17 @@ module.exports = {
       if (!command) command = client.commands.get(client.commandaliases.get(cmd));
       if (command) {
         if (command.cooldown) {
-          if (cooldown.has(`${command.name}${message.author.id}`)) return message.reply({ content: `Command on Cooldown \`${ms(cooldown.get(`${command.name}${message.author.id}`) - Date.now(), { long: true }).replace("minutes", `menit`).replace("seconds", `detik`).replace("second", `detik`).replace("ms", `ms`)}\` coba lagi nanti.` }).then(message => setTimeout(() => message.delete(), cooldown.get(`${command.name}${message.author.id}`) - Date.now()))
+          if (cooldown.has(`${command.name}${message.author.id}`)) {
+            message.reply({
+              content: `Command on Cooldown \`${ms(cooldown.get(`${command.name}${message.author.id}`) - Date.now(), { long: true }).replace("minutes", `menit`).replace("seconds", `detik`).replace("second", `detik`).replace("ms", `ms`)}\` coba lagi nanti OwO`,
+              allowedMentions: { repliedUser: false }
+            }).then(msg => {
+              setTimeout(() => {
+                msg.delete();
+              }, cooldown.get(`${command.name}${message.author.id}`) - Date.now())
+            })
+            return
+          }
           command.run(client, message, args)
           cooldown.set(`${command.name}${message.author.id}`, Date.now() + command.cooldown)
           setTimeout(() => {
