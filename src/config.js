@@ -18,7 +18,7 @@ module.exports = {
   folks_RoleID: process.env.DEPLOY_CONTEXT == "dev" ? "1180557782802497546" : "940237965689503774",
   oneYearServiceRole: process.env.DEPLOY_CONTEXT == "dev" ? "1049590864042803220" : "1049592266521583617",
   twoYearServiceRole: process.env.DEPLOY_CONTEXT == "dev" ? "1049590864042803220" : "1050298205952286760",
-
+  threeYearServiceRole: process.env.DEPLOY_CONTEXT == "dev" ? "1049590864042803220" : "1180739320714379414",
 
   embedColor: "#fd46bc",
 

@@ -5,6 +5,10 @@ const ms = require("ms");
 const _serverBoost = require("../sharedCode/server-related/_serverBoost.js");
 const _donate = require("../sharedCode/server-related/_donate.js");
 const { getDateDiff, replyMessage } = require("../utils/utils.js");
+const Canvas = require('canvas');
+const { registerFont } = require('canvas');
+registerFont('./font/Butler_Bold.ttf', { family: 'ButlerBold' });
+const path = require('path');
 const cooldown = new Collection();
 
 const usersetimg = new Set();
@@ -26,6 +30,7 @@ module.exports = {
     const client = message.client;
     const prefix = config.prefix;
     const userID = message.author.id;
+    const username = message.author.username;
 
     registerCommands();
     autoDeleteAmariBotMessage();
@@ -287,32 +292,68 @@ module.exports = {
       if (blacklistedChannel.includes(message.channelId) || userYear[0] === 0) return;
       const userRoleCache = message.member.roles.cache;
 
-      const replyMsg1Year = [
-        `**Thank you for your 1 Year Service** <@${userID}> 🎉 <:nindy_yes:977817511821213757>\n_(Received 1 Year Operation Badge, Check out your profile!)_`,
-        `**Your hard work and perseverance have paid off. Congratulations** <@${userID}> 🧤\n_(Received 1 Year Operation Badge, Check out your profile!)_`,
-        `**You did it <@${userID}>! We knew you could!, take this 1 Year Operation Badge as a Token of Appreciation** :identification_card:\n_(Received 1 Year Operation Badge, Check out your profile!)_`,
-      ]
-      const replyMsg2Year = [
-        `**Thank you sir for your wonderfull 2 Year of Service** <@${userID}> 🎉 <:nindy_yes:977817511821213757>\n_(Received 2 Year Operation Badge, Check out your profile!)_`,
-        `**Nindy know your hard work in this 2 year of Service. Congratulations** <@${userID}> 🧤\n_(Received 2 Year Operation Badge, Check out your profile!)_`,
-        `**Well done <@${userID}>! We knew you could!, take this 2 Year Operation Badge as a Token of Appreciation** :identification_card:\n_(Received 2 Year Operation Badge, Check out your profile!)_`,
-      ]
-      // const replyMsg3Year = [
-      //   `**Thank you sir for your amazing 3 Year of Service** <@${userID}> 🎉 <:nindy_yes:977817511821213757>\n_(Received 2 Year Operation Badge, Check out your profile!)_`,
+      // const replyMsg1Year = [
+      //   `**Thank you for your 1 Year Service** <@${userID}> 🎉 <:nindy_yes:977817511821213757>\n_(Received 1 Year Operation Badge, Check out your profile!)_`,
+      //   `**Your hard work and perseverance have paid off. Congratulations** <@${userID}> 🧤\n_(Received 1 Year Operation Badge, Check out your profile!)_`,
+      //   `**You did it <@${userID}>! We knew you could!, take this 1 Year Operation Badge as a Token of Appreciation** :identification_card:\n_(Received 1 Year Operation Badge, Check out your profile!)_`,
       // ]
+      // const replyMsg2Year = [
+      //   `**Thank you sir for your wonderfull 2 Year of Service** <@${userID}> 🎉 <:nindy_yes:977817511821213757>\n_(Received 2 Year Operation Badge, Check out your profile!)_`,
+      //   `**Nindy know your hard work in this 2 year of Service. Congratulations** <@${userID}> 🧤\n_(Received 2 Year Operation Badge, Check out your profile!)_`,
+      //   `**Well done <@${userID}>! We knew you could!, take this 2 Year Operation Badge as a Token of Appreciation** :identification_card:\n_(Received 2 Year Operation Badge, Check out your profile!)_`,
+      // ]
+      const replyMsg3Year = [
+        `**Thank you sir for your amazing 3 Year of Service** <@${userID}> 🎉 <:nindy_yes:977817511821213757>\n_(Received 3 Year Operation Badge, Check out your profile!)_`,
+      ]
 
       if (userYear[0] === 1) {
         if (await userRoleCache.find(r => r.id === config.oneYearServiceRole)) return;
         await message.member.roles.add(config.oneYearServiceRole)
         // const randomMessage = replyMsg1Year[Math.floor(Math.random() * replyMsg1Year.length)];
         // replyMessage(message, randomMessage, null, false, false);
-        
       } else if (userYear[0] === 2) {
         if (await userRoleCache.find(r => r.id === config.twoYearServiceRole)) return;
-        await message.member.roles.remove(config.oneYearServiceRole)
+        try {
+          await message.member.roles.remove(config.oneYearServiceRole)
+        } catch (err) { }
         await message.member.roles.add(config.twoYearServiceRole)
         // const randomMessage = replyMsg2Year[Math.floor(Math.random() * replyMsg2Year.length)];
         // replyMessage(message, randomMessage, null, false, false);
+      } else if (userYear[0] === 3) {
+        if (await userRoleCache.find(r => r.id === config.threeYearServiceRole)) return;
+        try {
+          await message.member.roles.remove(config.oneYearServiceRole)
+          await message.member.roles.remove(config.twoYearServiceRole)
+        } catch (err) { }
+        await message.member.roles.add(config.twoYearServiceRole)
+
+        const canvas = Canvas.createCanvas(1920, 530)
+        const ctx = canvas.getContext('2d')
+
+        const templeteImage = await Canvas.loadImage(
+          path.join(__dirname, '../../img/3rd_year_operation.png')
+        );
+
+        const updatedUsername = username.length > 16 ? username.slice(0, 16) + '...' : username;
+        ctx.drawImage(templeteImage, 0, 0);
+        ctx.fillStyle = '#000000';
+        ctx.font =
+          (username.length <= 8 ? '160px' :
+            username.length <= 12 ? '120px' :
+              username.length <= 16 ? '100px' : '85px') + ' ButlerBold';
+        let text = `${updatedUsername}`;
+        ctx.textAlign = 'right';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(text, 1700, 280);
+
+        await message.channel.send({
+          content: replyMsg3Year[0],
+          files: [{
+            attachment: canvas.toBuffer('image/png'),
+            name: message.author.displayAvatarURL({ extension: 'png' })
+          }],
+        })
+
       }
     }
 
