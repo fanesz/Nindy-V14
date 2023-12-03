@@ -41,7 +41,7 @@ module.exports = {
       basecache.displayAvatarURL({ extension: 'png', size: 1024 })
     );
     const templeteImage = await Canvas.loadImage(
-      path.join(__dirname, '../../img/serverboost.png')
+      path.join(__dirname, '../../../img/serverboost.png')
     );
 
     ctx.drawImage(userProfile, 405, 279, 720, 720);

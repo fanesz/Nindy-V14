@@ -74,7 +74,7 @@ module.exports = {
     const ctx = canvas.getContext('2d');
 
     ctx.drawImage(await Canvas.loadImage(avatar), 178, 569, 365, 365);
-    ctx.drawImage(await Canvas.loadImage(path.join(__dirname, '../../img/donaturv2.1.png')), 0, 0);
+    ctx.drawImage(await Canvas.loadImage(path.join(__dirname, '../../../img/donaturv2.1.png')), 0, 0);
     ctx.fillStyle = '#ffffff';
     const centerreceipt = 1040;
 
@@ -351,7 +351,7 @@ module.exports = {
     }
 
     const commandType = interaction || message;
-    let canvasnew = "../../img/donaturv2.1.png";
+    let canvasnew = "../../../img/donaturv2.1.png";
     
     if (donateEmbed) {
       await client.channels.cache.get(config.honorable_LogChannelID).send({
