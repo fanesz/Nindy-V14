@@ -6,7 +6,7 @@ module.exports = {
   slashCMD_LogChannelID: process.env.DEPLOY_CONTEXT == "dev" ? "1152089543219101769" : "1152642684486430901",
   userUpdate_LogChannelID: process.env.DEPLOY_CONTEXT == "dev" ? "1152089543219101769" : "1152642684486430901",
   voice_LogChannelID: process.env.DEPLOY_CONTEXT == "dev" ? "1152089543219101769" : "962406610523816056",
-  muted_LogChannelID: process.env.DEPLOY_CONTEXT == "dev" ? "1152089543219101769" : "1152642684486430901",
+  muted_LogChannelID: process.env.DEPLOY_CONTEXT == "dev" ? "1152089543219101769" : "802877437477912576",
   moderation_LogChannelID: process.env.DEPLOY_CONTEXT == "dev" ? "1152089543219101769" : "802877437477912576",
   automod_LogChannelID: process.env.DEPLOY_CONTEXT == "dev" ? "1177127843537375242" : "988016439413846066",
   honorable_LogChannelID: process.env.DEPLOY_CONTEXT == "dev" ? "1177127843537375242" : "942414209453555793",
