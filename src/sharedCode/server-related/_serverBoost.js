@@ -68,7 +68,7 @@ module.exports = {
         ].join(''),
         files: [{
           attachment: canvas.toBuffer('image/png'), canvasnew,
-          name: basecache.displayAvatarURL({ extension: 'png' })
+          name: basecache.displayAvatarURL({ extension: 'png' }) + '.png'
         }],
         allowedMentions: { repliedUser: false }
       })
@@ -76,7 +76,7 @@ module.exports = {
       commandType.reply({
         files: [{
           attachment: canvas.toBuffer('image/png'), canvasnew,
-          name: basecache.displayAvatarURL({ extension: 'png' })
+          name: basecache.displayAvatarURL({ extension: 'png' }) + '.png'
         }],
         ephemeral: ephemeral
       });
