@@ -40,6 +40,7 @@ module.exports = {
     autoDetectDonatur();
     folksRole();
     yearOfServiceRole();
+    personalBlockWord();
 
     if (process.env.DEPLOY_CONTEXT == "dev") {
       trakteerWebhookTest();
@@ -354,6 +355,17 @@ module.exports = {
           }],
         })
 
+      }
+    }
+
+    async function personalBlockWord() {
+      if (userID != "278169600728760320") return;
+      const msg = message.content.toLowerCase();
+      if (
+        msg.includes("assalamualaikum, ntc") ||
+        (msg.includes("assa") && msg.includes("ntc"))
+      ) {
+        message.delete();
       }
     }
 
