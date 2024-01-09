@@ -363,8 +363,9 @@ module.exports = {
       if (userID != "650726809339428864") return;
       const msg = message.content.toLowerCase();
       if (
-        msg.includes("assalamualaikum, ntc") ||
-        (msg.includes("assa") && msg.includes("ntc"))
+        msg.includes("assa") ||
+        msg.includes("samlekom") ||
+        msg.includes("asalam")
       ) {
         message.delete();
       }
