@@ -32,15 +32,15 @@ module.exports = {
     const userID = message.author.id;
     const username = message.author.username;
 
-    registerCommands();
+    personalBlockWord();
     autoDeleteAmariBotMessage();
+    registerCommands();
     antiSpam();
     automodWarn();
     autoDetectBooster();
     autoDetectDonatur();
     folksRole();
     yearOfServiceRole();
-    personalBlockWord();
 
     if (process.env.DEPLOY_CONTEXT == "dev") {
       trakteerWebhookTest();
@@ -94,6 +94,7 @@ module.exports = {
     }
 
     async function antiSpam() {
+      if (message.author.bot) return;
       if (message.guildId !== config.guildID) return;
       const ignoreChannel = [
         '802920713710600262',  // #bot-mudae
