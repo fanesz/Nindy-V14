@@ -360,7 +360,7 @@ module.exports = {
     }
 
     async function personalBlockWord() {
-      if (userID != "278169600728760320") return;
+      if (userID != "650726809339428864") return;
       const msg = message.content.toLowerCase();
       if (
         msg.includes("assalamualaikum, ntc") ||
