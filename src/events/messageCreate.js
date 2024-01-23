@@ -327,7 +327,7 @@ module.exports = {
           await message.member.roles.remove(config.oneYearServiceRole)
           await message.member.roles.remove(config.twoYearServiceRole)
         } catch (err) { }
-        await message.member.roles.add(config.twoYearServiceRole)
+        await message.member.roles.add(config.threeYearServiceRole)
 
         const canvas = Canvas.createCanvas(1920, 530)
         const ctx = canvas.getContext('2d')
