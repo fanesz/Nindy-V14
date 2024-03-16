@@ -50,7 +50,6 @@ module.exports = {
     yearOfServiceRole();
     personalBlockWord();
 
-
     if (process.env.DEPLOY_CONTEXT == "dev") {
       trakteerWebhookTest();
     }

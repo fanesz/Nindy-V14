@@ -6,5 +6,5 @@ module.exports = {
   cooldown: 5000,
   run: async (client, message, args) => {
     _team.run(client, message, args, null);
-  }
+  },
 };

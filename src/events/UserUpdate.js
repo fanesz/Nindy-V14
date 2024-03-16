@@ -17,28 +17,38 @@ module.exports = {
       const username_before = oldMember.username;
       const username_after = newMember.username;
       if (username_before != username_after) {
-        if (await userdb.get(`${userid}.username`) == null) {
-          await userdb.set(`${userid}.username`, [[username_before, timestamp]])
+        if ((await userdb.get(`${userid}.username`)) == null) {
+          await userdb.set(`${userid}.username`, [
+            [username_before, timestamp],
+          ]);
         }
-        userdb.push(`${userid}.username`, [username_after, timestamp])
+        userdb.push(`${userid}.username`, [username_after, timestamp]);
 
-        client.userupdatelog(oldMember.id, username_before, username_after, "username")
+        client.userupdatelog(
+          oldMember.id,
+          username_before,
+          username_after,
+          "username"
+        );
       }
 
       const displayName_before = oldMember.globalName || oldMember.username;
       const displayName_after = newMember.globalName || newMember.username;
       if (displayName_before !== displayName_after) {
-        if (await userdb.get(`${userid}.displayName`) == null) {
-          await userdb.set(`${userid}.displayName`, [[displayName_before, timestamp]])
+        if ((await userdb.get(`${userid}.displayName`)) == null) {
+          await userdb.set(`${userid}.displayName`, [
+            [displayName_before, timestamp],
+          ]);
         }
-        userdb.push(`${userid}.displayName`, [displayName_after, timestamp])
+        userdb.push(`${userid}.displayName`, [displayName_after, timestamp]);
 
-        client.userupdatelog(oldMember.id, displayName_before, displayName_after, "global display name")
+        client.userupdatelog(
+          oldMember.id,
+          displayName_before,
+          displayName_after,
+          "global display name"
+        );
       }
     }
-
-
-
-
-  }
+  },
 };

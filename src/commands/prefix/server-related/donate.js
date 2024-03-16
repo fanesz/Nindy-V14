@@ -6,6 +6,5 @@ module.exports = {
   cooldown: 5000,
   run: async (client, message, args) => {
     _donate.run(client, message, args, null, null);
-  }
+  },
 };
-

@@ -1,7 +1,7 @@
 const { Collection } = require("discord.js");
 const { readdirSync } = require("node:fs");
-const path = require('path');
-const dirPath = path.resolve(__dirname, '../events');
+const path = require("path");
+const dirPath = path.resolve(__dirname, "../events");
 
 module.exports = {
   run: async (client) => {
@@ -14,5 +14,5 @@ module.exports = {
         client.on(event.name, (...args) => event.execute(...args));
       }
     });
-  }
+  },
 };

@@ -1,7 +1,7 @@
 const { Collection } = require("discord.js");
 const { readdirSync } = require("node:fs");
-const path = require('path');
-const dirPath = path.resolve(__dirname, '../commands/prefix');
+const path = require("path");
+const dirPath = path.resolve(__dirname, "../commands/prefix");
 
 module.exports = {
   run: async (client) => {
@@ -21,6 +21,5 @@ module.exports = {
         }
       });
     });
-
-  }
+  },
 };

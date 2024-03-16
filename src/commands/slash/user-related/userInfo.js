@@ -5,13 +5,15 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName("user")
     .setDescription("Cek info user, history nickname, dan history username")
-    .addStringOption(option =>
-      option.setName("user")
+    .addStringOption((option) =>
+      option
+        .setName("user")
         .setDescription("Berupa username / user ID")
         .setRequired(true)
     )
-    .addStringOption(option =>
-      option.setName("reply")
+    .addStringOption((option) =>
+      option
+        .setName("reply")
         .setDescription("Menampilkan/menyembunyikan reply message")
         .setRequired(false)
         .addChoices(
@@ -20,6 +22,6 @@ module.exports = {
         )
     ),
   run: async (client, interaction) => {
-    _userInfo.run(client, null, null, interaction)
-  }
+    _userInfo.run(client, null, null, interaction);
+  },
 };

@@ -5,5 +5,5 @@ module.exports = {
   aliases: ["sayr"],
   run: async (client, message, args) => {
     _say.run(client, message, args, null);
-  }
+  },
 };

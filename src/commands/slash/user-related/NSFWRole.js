@@ -5,8 +5,9 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName("nsfw")
     .setDescription("Add/Remove role NSFW (inspector)")
-    .addStringOption(option =>
-      option.setName("reply")
+    .addStringOption((option) =>
+      option
+        .setName("reply")
         .setDescription("Menampilkan/menyembunyikan reply message")
         .setRequired(false)
         .addChoices(
@@ -15,6 +16,6 @@ module.exports = {
         )
     ),
   run: async (client, interaction) => {
-    _NSFWRole.run(client, null, null, interaction)
-  }
+    _NSFWRole.run(client, null, null, interaction);
+  },
 };

@@ -3,6 +3,6 @@ module.exports = {
   aliases: ["pong"],
   cooldown: 5000,
   run: async (client, message, args) => {
-    message.reply(`Pong 🏓`)
-  }
+    message.reply(`Pong 🏓`);
+  },
 };

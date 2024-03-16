@@ -5,5 +5,5 @@ module.exports = {
   aliases: ["rating"],
   run: async (client, message, args) => {
     _rate.run(client, message, args, null);
-  }
+  },
 };

@@ -5,12 +5,13 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName("random")
     .setDescription("Nindy akan generate random angka 1 - (angka)")
-    .addStringOption(option =>
-      option.setName("number")
+    .addStringOption((option) =>
+      option
+        .setName("number")
         .setDescription("Range angka yang ingin dipilih")
         .setRequired(true)
     ),
   run: async (client, interaction) => {
-    _random.run(client, null, null, interaction)
-  }
+    _random.run(client, null, null, interaction);
+  },
 };

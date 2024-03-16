@@ -9,7 +9,7 @@ module.exports = {
       if (interaction.user.bot) return;
       try {
         const command = client.slashcommands.get(interaction.commandName);
-        if (!command) return; 
+        if (!command) return;
         command.run(client, interaction);
       } catch (error) {
         console.error(error);
@@ -17,10 +17,12 @@ module.exports = {
         if (error instanceof CommandError) {
           interaction.reply({ content: `⚠ ${error.message}`, ephemeral: true });
         } else {
-          interaction.reply({ content: "⚠ Something went wrong!", ephemeral: true });
+          interaction.reply({
+            content: "⚠ Something went wrong!",
+            ephemeral: true,
+          });
         }
       }
     }
-
-  }
+  },
 };

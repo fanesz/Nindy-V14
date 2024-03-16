@@ -6,6 +6,6 @@ module.exports = {
     .setName("rate")
     .setDescription("Nindy akan rate kamu!"),
   run: async (client, interaction) => {
-    _rate.run(client, null, null, interaction)
-  }
+    _rate.run(client, null, null, interaction);
+  },
 };

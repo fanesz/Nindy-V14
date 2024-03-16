@@ -5,13 +5,12 @@ module.exports = {
   data: new SlashCommandBuilder()
     .setName("boost")
     .setDescription("Generate thankyou image for server boosters")
-    .addStringOption(option =>
-      option.setName("user")
-        .setDescription("user ID")
-        .setRequired(true)
+    .addStringOption((option) =>
+      option.setName("user").setDescription("user ID").setRequired(true)
     )
-    .addStringOption(option =>
-      option.setName("reply")
+    .addStringOption((option) =>
+      option
+        .setName("reply")
         .setDescription("Menampilkan/menyembunyikan reply message")
         .setRequired(false)
         .addChoices(
@@ -20,6 +19,6 @@ module.exports = {
         )
     ),
   run: async (client, interaction) => {
-    _serverBoost.run(client, null, null, interaction, null)
-  }
+    _serverBoost.run(client, null, null, interaction, null);
+  },
 };
