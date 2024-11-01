@@ -363,7 +363,7 @@ module.exports = {
     }
 
     async function yearOfServiceRole() {
-      if (message.author.bot) return;
+      if (message.guildId !== config.guildID) return;
       const userYear = getDateDiff(
         await message.guild.members.cache.get(userID)?.joinedAt
       );
@@ -470,7 +470,7 @@ module.exports = {
       ];
       if (!whitelistedChannel.includes(message.channelId)) return;
       if (message.content.startsWith(config.prefix) || message.content.startsWith("//")) return;
-      const response = await chat(message.content);
+      const response = await chat(message.content, username);
       message.reply({
         content: response.response ?? "...",
         allowedMentions: { repliedUser: false },
