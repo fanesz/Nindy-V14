@@ -17,6 +17,7 @@ const { registerFont } = require("canvas");
 registerFont("./font/Butler_Bold.ttf", { family: "ButlerBold" });
 const path = require("path");
 const cooldown = new Collection();
+const { chat } = require("../integration/nindy-gpt");
 
 const usersetimg = new Set();
 const spamsetimg = new Set();
@@ -49,6 +50,7 @@ module.exports = {
     folksRole();
     yearOfServiceRole();
     personalBlockWord();
+    nindyGPT();
 
     if (process.env.DEPLOY_CONTEXT == "dev") {
       trakteerWebhookTest();
@@ -459,6 +461,19 @@ module.exports = {
       ) {
         message.delete();
       }
+    }
+
+    async function nindyGPT() {
+      const whitelistedChannel = [
+        "1301900314936344700", // debug
+        "1301897928365051954", // ntc
+      ];
+      if (!whitelistedChannel.includes(message.channelId)) return;
+      const response = await chat(message.content);
+      message.reply({
+        content: response.response ?? "...",
+        allowedMentions: { repliedUser: false },
+      });
     }
   },
 };
