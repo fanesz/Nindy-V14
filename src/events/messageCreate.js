@@ -469,6 +469,7 @@ module.exports = {
         "1301897928365051954", // ntc
       ];
       if (!whitelistedChannel.includes(message.channelId)) return;
+      if (msg.content.startsWith(config.prefix) || msg.content.startsWith("//")) return;
       const response = await chat(message.content);
       message.reply({
         content: response.response ?? "...",
