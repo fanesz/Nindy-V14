@@ -93,7 +93,7 @@ module.exports = {
           {
             attachment: canvas.toBuffer("image/png"),
             canvasnew,
-            name: basecache.displayAvatarURL({ extension: "png" }) + ".png",
+            name: "donatur.png",
           },
         ],
         ephemeral: ephemeral,
