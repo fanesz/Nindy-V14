@@ -188,7 +188,7 @@ module.exports = {
             user,
             `detected spamming a forbidden word and i kick him (●'◡'●) tehe//`
           );
-          message.channel.send(`<@${user}>, kicked! ~(=^‥^)ノ`);
+          message.channel.send(`<@${user}>, kicked! ૮˃‌֊ ˂‌ ა✧ ！`);
           return;
         } else {
           userautomod.add(user);
