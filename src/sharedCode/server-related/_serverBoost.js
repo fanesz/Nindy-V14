@@ -28,7 +28,7 @@ module.exports = {
     try {
       if (isNaN(userID)) {
         await commandType.channel.guild.members
-          .fetch({ cache: false })
+          .fetch({ cache: true })
           .then((members) =>
             members.find((member) => member.displayName === userID)
           )
@@ -93,7 +93,7 @@ module.exports = {
           {
             attachment: canvas.toBuffer("image/png"),
             canvasnew,
-            name: basecache.displayAvatarURL({ extension: "png" }) + ".png",
+            name: "donatur.png",
           },
         ],
         ephemeral: ephemeral,

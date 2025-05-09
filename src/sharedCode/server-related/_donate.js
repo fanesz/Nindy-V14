@@ -73,10 +73,11 @@ module.exports = {
       let tanggalResult = `${hari}, ${dateSplit[0] - 1} ${
         Months[dateSplit[1]]
       } pukul ${timeSplit[0]}:${timeSplit[1]}`;
-      let jumlahFile = data.title.substring(9).slice(0, data.title.length - 21);
-      let donator = data.author.name;
       let text = data.description;
-      return [donator, jumlahFile, text, tanggalResult];
+      let jumlahFile = text.split("mentraktir **")[1].split("**")[0];
+      let pesan = text.split("dengan pesan ***\"")[1].split("\"***")[0];
+      let donator = data.author.name;
+      return [donator, jumlahFile, pesan, tanggalResult];
     }
 
     const rawData = getEmbedData(donateEmbedMessage);
@@ -100,9 +101,10 @@ module.exports = {
         console.log(err);
       }
     } else {
+      const commandType = interaction || message;
       try {
-        await message.channel.guild.members
-          .fetch({ cache: false })
+        await commandType.channel.guild.members
+          .fetch({ cache: true })
           .then((members) =>
             members.find((member) => member.user.username === ordernama)
           )
