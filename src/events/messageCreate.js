@@ -178,7 +178,9 @@ module.exports = {
         const role = guild.roles.cache.get(config.mute_RoleID);
         const member = await guild.members.fetch(user);
 
-        if (userautomod.has(user)) {
+        const automodChannel = "988016439413846066"; 
+
+        if (userautomod.has(user) && channel === automodChannel) {
           await member.send(
             "We kick you from NTC Department because we detected you spamming a forbidden message. If this is a mistakes, please rejoin (discord.gg/neoteric) or dm <@278169600728760320>!"
           );
